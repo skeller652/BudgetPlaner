@@ -404,7 +404,6 @@ label {
 
 <div class="container">
 
-<!-- COCKPIT -->
 <section id="pageCockpit" class="page active">
 
   <div class="section-title">Cockpit</div>
@@ -532,7 +531,6 @@ label {
 </section>
 
 
-<!-- EINNAHMEN -->
 <section id="pageIncome" class="page">
 
   <div class="section-title">Fixeinnahmen</div>
@@ -541,26 +539,16 @@ label {
 
     <div class="hint" style="margin-top:0;margin-bottom:15px;">
       Fixeinnahmen gelten automatisch für alle 12 Monate.
-      Beispiel: Lohn, feste Mieteinnahmen.
     </div>
 
     <div class="form-group">
       <label>Beschreibung</label>
-      <input
-        id="fixedIncomeDescription"
-        type="text"
-        placeholder="z.B. Lohn"
-      >
+      <input id="fixedIncomeDescription" type="text" placeholder="z.B. Lohn">
     </div>
 
     <div class="form-group">
       <label>Betrag pro Monat CHF</label>
-      <input
-        id="fixedIncomeAmount"
-        type="number"
-        step="0.01"
-        placeholder="z.B. 8300"
-      >
+      <input id="fixedIncomeAmount" type="number" step="0.01" placeholder="z.B. 8300">
     </div>
 
     <button onclick="addFixedIncome()">
@@ -590,34 +578,22 @@ label {
   </div>
 
 
-  <div class="section-title">
-    Zusatzeinnahme hinzufügen
-  </div>
+  <div class="section-title">Zusatzeinnahme hinzufügen</div>
 
   <div class="card">
 
     <div class="hint" style="margin-top:0;margin-bottom:15px;">
       Zusatzeinnahmen gelten nur für den ausgewählten Monat.
-      Beispiel: Bonus, Spesen, Nebenverdienst.
     </div>
 
     <div class="form-group">
       <label>Beschreibung</label>
-      <input
-        id="extraIncomeDescription"
-        type="text"
-        placeholder="z.B. Bonus"
-      >
+      <input id="extraIncomeDescription" type="text" placeholder="z.B. Bonus">
     </div>
 
     <div class="form-group">
       <label>Betrag CHF</label>
-      <input
-        id="extraIncomeAmount"
-        type="number"
-        step="0.01"
-        placeholder="0.00"
-      >
+      <input id="extraIncomeAmount" type="number" step="0.01" placeholder="0.00">
     </div>
 
     <button onclick="addExtraIncome()">
@@ -660,7 +636,6 @@ label {
 </section>
 
 
-<!-- FIXKOSTEN -->
 <section id="pageFixed" class="page">
 
   <div class="section-title">Monatliche Fixkosten</div>
@@ -673,21 +648,12 @@ label {
 
     <div class="form-group">
       <label>Beschreibung</label>
-      <input
-        id="monthlyFixedName"
-        type="text"
-        placeholder="z.B. Miete"
-      >
+      <input id="monthlyFixedName" type="text" placeholder="z.B. Miete">
     </div>
 
     <div class="form-group">
       <label>Betrag pro Monat CHF</label>
-      <input
-        id="monthlyFixedAmount"
-        type="number"
-        step="0.01"
-        placeholder="0.00"
-      >
+      <input id="monthlyFixedAmount" type="number" step="0.01" placeholder="0.00">
     </div>
 
     <button onclick="addMonthlyFixed()">
@@ -716,21 +682,12 @@ label {
 
     <div class="form-group">
       <label>Beschreibung</label>
-      <input
-        id="yearlyFixedName"
-        type="text"
-        placeholder="z.B. Autoversicherung"
-      >
+      <input id="yearlyFixedName" type="text" placeholder="z.B. Autoversicherung">
     </div>
 
     <div class="form-group">
       <label>Jahresbetrag CHF</label>
-      <input
-        id="yearlyFixedAmount"
-        type="number"
-        step="0.01"
-        placeholder="0.00"
-      >
+      <input id="yearlyFixedAmount" type="number" step="0.01" placeholder="0.00">
     </div>
 
     <button onclick="addYearlyFixed()">
@@ -780,7 +737,6 @@ label {
 </section>
 
 
-<!-- AUSGABEN -->
 <section id="pageExpenses" class="page">
 
   <div class="section-title">Ausgaben</div>
@@ -800,15 +756,10 @@ label {
 
     <div class="form-group">
       <label>Beschreibung</label>
-      <input
-        id="expenseName"
-        type="text"
-        placeholder="z.B. Einkaufen"
-      >
+      <input id="expenseName" type="text" placeholder="z.B. Einkaufen">
     </div>
 
     <div class="form-group">
-
       <label>Kategorie</label>
 
       <select id="expenseCategory">
@@ -824,22 +775,20 @@ label {
         <option>Geschenke</option>
         <option>Sonstiges</option>
       </select>
-
     </div>
 
     <div class="form-group">
       <label>Betrag CHF</label>
-      <input
-        id="expenseAmount"
-        type="number"
-        step="0.01"
-        placeholder="0.00"
-      >
+      <input id="expenseAmount" type="number" step="0.01" placeholder="0.00">
     </div>
 
     <button onclick="addExpense()">
       Ausgabe hinzufügen
     </button>
+
+    <div class="hint">
+      Das aktuelle Datum wird automatisch zur Ausgabe gespeichert.
+    </div>
 
   </div>
 
@@ -853,30 +802,22 @@ label {
 
     <div class="overview-card">
       <div class="overview-label">Einnahmen</div>
-      <div id="expenseAnalysisIncome" class="overview-value positive">
-        CHF 0.00
-      </div>
+      <div id="expenseAnalysisIncome" class="overview-value positive">CHF 0.00</div>
     </div>
 
     <div class="overview-card">
       <div class="overview-label">Fixkosten</div>
-      <div id="expenseAnalysisFixed" class="overview-value">
-        CHF 0.00
-      </div>
+      <div id="expenseAnalysisFixed" class="overview-value">CHF 0.00</div>
     </div>
 
     <div class="overview-card">
       <div class="overview-label">Ausgaben</div>
-      <div id="expenseAnalysisExpenses" class="overview-value">
-        CHF 0.00
-      </div>
+      <div id="expenseAnalysisExpenses" class="overview-value">CHF 0.00</div>
     </div>
 
     <div class="overview-card">
       <div class="overview-label">Restbudget</div>
-      <div id="expenseAnalysisBalance" class="overview-value">
-        CHF 0.00
-      </div>
+      <div id="expenseAnalysisBalance" class="overview-value">CHF 0.00</div>
     </div>
 
   </div>
@@ -914,42 +855,24 @@ label {
 </div>
 
 
-<!-- TASKLEISTE -->
-
 <nav class="bottom-nav">
 
-  <button
-    id="navCockpit"
-    class="nav-btn active"
-    onclick="showPage('cockpit')"
-  >
+  <button id="navCockpit" class="nav-btn active" onclick="showPage('cockpit')">
     <span class="nav-icon">◉</span>
     Cockpit
   </button>
 
-  <button
-    id="navIncome"
-    class="nav-btn"
-    onclick="showPage('income')"
-  >
+  <button id="navIncome" class="nav-btn" onclick="showPage('income')">
     <span class="nav-icon">＋</span>
     Einnahmen
   </button>
 
-  <button
-    id="navFixed"
-    class="nav-btn"
-    onclick="showPage('fixed')"
-  >
+  <button id="navFixed" class="nav-btn" onclick="showPage('fixed')">
     <span class="nav-icon">▣</span>
     Fixkosten
   </button>
 
-  <button
-    id="navExpenses"
-    class="nav-btn"
-    onclick="showPage('expenses')"
-  >
+  <button id="navExpenses" class="nav-btn" onclick="showPage('expenses')">
     <span class="nav-icon">−</span>
     Ausgaben
   </button>
@@ -974,14 +897,12 @@ const months = [
   "Dezember"
 ];
 
-
 let currentMonth =
   new Date().getMonth();
 
-
 let data =
   JSON.parse(
-    localStorage.getItem("budgetDataV5")
+    localStorage.getItem("budgetDataV6")
   ) || {
     fixedIncomeItems: [],
     monthlyFixedItems: [],
@@ -1011,12 +932,10 @@ function initializeData() {
   for (let i = 0; i < 12; i++) {
 
     if (!data.months[i]) {
-
       data.months[i] = {
         extraIncomes: [],
         expenses: []
       };
-
     }
 
     if (!Array.isArray(data.months[i].extraIncomes)) {
@@ -1035,7 +954,7 @@ function initializeData() {
 function saveData() {
 
   localStorage.setItem(
-    "budgetDataV5",
+    "budgetDataV6",
     JSON.stringify(data)
   );
 
@@ -1063,7 +982,6 @@ function showPage(page) {
 
   });
 
-
   const map = {
     cockpit: "Cockpit",
     income: "Income",
@@ -1071,22 +989,17 @@ function showPage(page) {
     expenses: "Expenses"
   };
 
-
   const name = map[page];
-
 
   document
     .getElementById("page" + name)
     .classList.add("active");
 
-
   document
     .getElementById("nav" + name)
     .classList.add("active");
 
-
   updateEverything();
-
 
   window.scrollTo({
     top: 0,
@@ -1104,7 +1017,6 @@ function renderMonthGrids() {
     "expenseMonthGrid"
   ];
 
-
   grids.forEach(gridId => {
 
     const grid =
@@ -1112,12 +1024,10 @@ function renderMonthGrids() {
 
     grid.innerHTML = "";
 
-
     months.forEach((month,index) => {
 
       const button =
         document.createElement("button");
-
 
       button.className =
         "month-btn" +
@@ -1127,19 +1037,12 @@ function renderMonthGrids() {
             : ""
         );
 
-
-      button.textContent =
-        month;
-
+      button.textContent = month;
 
       button.onclick = () => {
-
         currentMonth = index;
-
         updateEverything();
-
       };
-
 
       grid.appendChild(button);
 
@@ -1160,14 +1063,12 @@ function addFixedIncome() {
       .value
       .trim();
 
-
   const amount =
     parseFloat(
       document
         .getElementById("fixedIncomeAmount")
         .value
     );
-
 
   if (
     !description ||
@@ -1180,9 +1081,7 @@ function addFixedIncome() {
     );
 
     return;
-
   }
-
 
   data.fixedIncomeItems.push({
     id: createId(),
@@ -1190,19 +1089,15 @@ function addFixedIncome() {
     amount
   });
 
-
   document.getElementById(
     "fixedIncomeDescription"
   ).value = "";
-
 
   document.getElementById(
     "fixedIncomeAmount"
   ).value = "";
 
-
   saveData();
-
   updateEverything();
 
 }
@@ -1215,9 +1110,7 @@ function editFixedIncome(id) {
       item => item.id === id
     );
 
-
   if (!item) return;
-
 
   const description =
     prompt(
@@ -1225,9 +1118,7 @@ function editFixedIncome(id) {
       item.description
     );
 
-
   if (description === null) return;
-
 
   const amountInput =
     prompt(
@@ -1235,13 +1126,10 @@ function editFixedIncome(id) {
       item.amount
     );
 
-
   if (amountInput === null) return;
-
 
   const amount =
     parseFloat(amountInput);
-
 
   if (
     !description.trim() ||
@@ -1250,21 +1138,16 @@ function editFixedIncome(id) {
   ) {
 
     alert("Ungültige Eingabe.");
-
     return;
 
   }
 
-
   item.description =
     description.trim();
 
-  item.amount =
-    amount;
-
+  item.amount = amount;
 
   saveData();
-
   updateEverything();
 
 }
@@ -1277,9 +1160,7 @@ function deleteFixedIncome(id) {
       item => item.id !== id
     );
 
-
   saveData();
-
   updateEverything();
 
 }
@@ -1295,14 +1176,12 @@ function addExtraIncome() {
       .value
       .trim();
 
-
   const amount =
     parseFloat(
       document
         .getElementById("extraIncomeAmount")
         .value
     );
-
 
   if (
     !description ||
@@ -1318,29 +1197,21 @@ function addExtraIncome() {
 
   }
 
-
-  data
-    .months[currentMonth]
-    .extraIncomes
-    .push({
-      id: createId(),
-      description,
-      amount
-    });
-
+  data.months[currentMonth].extraIncomes.push({
+    id: createId(),
+    description,
+    amount
+  });
 
   document.getElementById(
     "extraIncomeDescription"
   ).value = "";
 
-
   document.getElementById(
     "extraIncomeAmount"
   ).value = "";
 
-
   saveData();
-
   updateEverything();
 
 }
@@ -1349,16 +1220,11 @@ function addExtraIncome() {
 function editExtraIncome(id) {
 
   const item =
-    data
-      .months[currentMonth]
-      .extraIncomes
-      .find(
-        item => item.id === id
-      );
-
+    data.months[currentMonth].extraIncomes.find(
+      item => item.id === id
+    );
 
   if (!item) return;
-
 
   const description =
     prompt(
@@ -1366,9 +1232,7 @@ function editExtraIncome(id) {
       item.description
     );
 
-
   if (description === null) return;
-
 
   const amountInput =
     prompt(
@@ -1376,13 +1240,10 @@ function editExtraIncome(id) {
       item.amount
     );
 
-
   if (amountInput === null) return;
-
 
   const amount =
     parseFloat(amountInput);
-
 
   if (
     !description.trim() ||
@@ -1391,21 +1252,16 @@ function editExtraIncome(id) {
   ) {
 
     alert("Ungültige Eingabe.");
-
     return;
 
   }
 
-
   item.description =
     description.trim();
 
-  item.amount =
-    amount;
-
+  item.amount = amount;
 
   saveData();
-
   updateEverything();
 
 }
@@ -1418,15 +1274,13 @@ function deleteExtraIncome(id) {
       item => item.id !== id
     );
 
-
   saveData();
-
   updateEverything();
 
 }
 
 
-/* FIXKOSTEN MONAT */
+/* FIXKOSTEN */
 
 function addMonthlyFixed() {
 
@@ -1436,14 +1290,12 @@ function addMonthlyFixed() {
       .value
       .trim();
 
-
   const amount =
     parseFloat(
       document
         .getElementById("monthlyFixedAmount")
         .value
     );
-
 
   if (
     !name ||
@@ -1459,26 +1311,21 @@ function addMonthlyFixed() {
 
   }
 
-
   data.monthlyFixedItems.push({
     id: createId(),
     name,
     amount
   });
 
-
   document.getElementById(
     "monthlyFixedName"
   ).value = "";
-
 
   document.getElementById(
     "monthlyFixedAmount"
   ).value = "";
 
-
   saveData();
-
   updateEverything();
 
 }
@@ -1491,9 +1338,7 @@ function editMonthlyFixed(id) {
       item => item.id === id
     );
 
-
   if (!item) return;
-
 
   const name =
     prompt(
@@ -1501,9 +1346,7 @@ function editMonthlyFixed(id) {
       item.name
     );
 
-
   if (name === null) return;
-
 
   const amountInput =
     prompt(
@@ -1511,13 +1354,10 @@ function editMonthlyFixed(id) {
       item.amount
     );
 
-
   if (amountInput === null) return;
-
 
   const amount =
     parseFloat(amountInput);
-
 
   if (
     !name.trim() ||
@@ -1526,21 +1366,14 @@ function editMonthlyFixed(id) {
   ) {
 
     alert("Ungültige Eingabe.");
-
     return;
 
   }
 
-
-  item.name =
-    name.trim();
-
-  item.amount =
-    amount;
-
+  item.name = name.trim();
+  item.amount = amount;
 
   saveData();
-
   updateEverything();
 
 }
@@ -1553,15 +1386,11 @@ function deleteMonthlyFixed(id) {
       item => item.id !== id
     );
 
-
   saveData();
-
   updateEverything();
 
 }
 
-
-/* FIXKOSTEN JAHR */
 
 function addYearlyFixed() {
 
@@ -1571,14 +1400,12 @@ function addYearlyFixed() {
       .value
       .trim();
 
-
   const amount =
     parseFloat(
       document
         .getElementById("yearlyFixedAmount")
         .value
     );
-
 
   if (
     !name ||
@@ -1594,26 +1421,21 @@ function addYearlyFixed() {
 
   }
 
-
   data.yearlyFixedItems.push({
     id: createId(),
     name,
     amount
   });
 
-
   document.getElementById(
     "yearlyFixedName"
   ).value = "";
-
 
   document.getElementById(
     "yearlyFixedAmount"
   ).value = "";
 
-
   saveData();
-
   updateEverything();
 
 }
@@ -1626,9 +1448,7 @@ function editYearlyFixed(id) {
       item => item.id === id
     );
 
-
   if (!item) return;
-
 
   const name =
     prompt(
@@ -1636,9 +1456,7 @@ function editYearlyFixed(id) {
       item.name
     );
 
-
   if (name === null) return;
-
 
   const amountInput =
     prompt(
@@ -1646,13 +1464,10 @@ function editYearlyFixed(id) {
       item.amount
     );
 
-
   if (amountInput === null) return;
-
 
   const amount =
     parseFloat(amountInput);
-
 
   if (
     !name.trim() ||
@@ -1661,21 +1476,14 @@ function editYearlyFixed(id) {
   ) {
 
     alert("Ungültige Eingabe.");
-
     return;
 
   }
 
-
-  item.name =
-    name.trim();
-
-  item.amount =
-    amount;
-
+  item.name = name.trim();
+  item.amount = amount;
 
   saveData();
-
   updateEverything();
 
 }
@@ -1688,9 +1496,7 @@ function deleteYearlyFixed(id) {
       item => item.id !== id
     );
 
-
   saveData();
-
   updateEverything();
 
 }
@@ -1706,12 +1512,10 @@ function addExpense() {
       .value
       .trim();
 
-
   const category =
     document
       .getElementById("expenseCategory")
       .value;
-
 
   const amount =
     parseFloat(
@@ -1719,7 +1523,6 @@ function addExpense() {
         .getElementById("expenseAmount")
         .value
     );
-
 
   if (
     !name ||
@@ -1735,27 +1538,35 @@ function addExpense() {
 
   }
 
+  /*
+    AKTUELLES DATUM AUTOMATISCH SPEICHERN
+  */
+
+  const now = new Date();
 
   data.months[currentMonth].expenses.push({
-    id: createId(),
-    name,
-    category,
-    amount
-  });
 
+    id: createId(),
+
+    name,
+
+    category,
+
+    amount,
+
+    date: now.toISOString()
+
+  });
 
   document.getElementById(
     "expenseName"
   ).value = "";
 
-
   document.getElementById(
     "expenseAmount"
   ).value = "";
 
-
   saveData();
-
   updateEverything();
 
 }
@@ -1764,16 +1575,11 @@ function addExpense() {
 function editExpense(id) {
 
   const expense =
-    data
-      .months[currentMonth]
-      .expenses
-      .find(
-        item => item.id === id
-      );
-
+    data.months[currentMonth].expenses.find(
+      item => item.id === id
+    );
 
   if (!expense) return;
-
 
   const name =
     prompt(
@@ -1781,9 +1587,7 @@ function editExpense(id) {
       expense.name
     );
 
-
   if (name === null) return;
-
 
   const amountInput =
     prompt(
@@ -1791,13 +1595,10 @@ function editExpense(id) {
       expense.amount
     );
 
-
   if (amountInput === null) return;
-
 
   const amount =
     parseFloat(amountInput);
-
 
   if (
     !name.trim() ||
@@ -1806,11 +1607,9 @@ function editExpense(id) {
   ) {
 
     alert("Ungültige Eingabe.");
-
     return;
 
   }
-
 
   expense.name =
     name.trim();
@@ -1818,9 +1617,11 @@ function editExpense(id) {
   expense.amount =
     amount;
 
+  /*
+    Das ursprüngliche Datum bleibt erhalten.
+  */
 
   saveData();
-
   updateEverything();
 
 }
@@ -1833,9 +1634,7 @@ function deleteExpense(id) {
       item => item.id !== id
     );
 
-
   saveData();
-
   updateEverything();
 
 }
@@ -1856,14 +1655,11 @@ function getFixedIncomeTotal() {
 
 function getExtraIncomeTotal(monthIndex) {
 
-  return data
-    .months[monthIndex]
-    .extraIncomes
-    .reduce(
-      (sum,item) =>
-        sum + Number(item.amount || 0),
-      0
-    );
+  return data.months[monthIndex].extraIncomes.reduce(
+    (sum,item) =>
+      sum + Number(item.amount || 0),
+    0
+  );
 
 }
 
@@ -1909,14 +1705,11 @@ function getYearlyFixedMonthly() {
 
 function getExpenseTotal(monthIndex) {
 
-  return data
-    .months[monthIndex]
-    .expenses
-    .reduce(
-      (sum,item) =>
-        sum + Number(item.amount || 0),
-      0
-    );
+  return data.months[monthIndex].expenses.reduce(
+    (sum,item) =>
+      sum + Number(item.amount || 0),
+    0
+  );
 
 }
 
@@ -1926,48 +1719,38 @@ function getMonthNumbers(monthIndex) {
   const fixedIncome =
     getFixedIncomeTotal();
 
-
   const extraIncome =
     getExtraIncomeTotal(monthIndex);
-
 
   const income =
     fixedIncome +
     extraIncome;
 
-
   const monthlyFixed =
     getMonthlyFixedTotal();
-
 
   const yearlyFixedMonthly =
     getYearlyFixedMonthly();
 
-
   const expenses =
     getExpenseTotal(monthIndex);
-
 
   const fixedTotal =
     monthlyFixed +
     yearlyFixedMonthly;
 
-
   const totalCosts =
     fixedTotal +
     expenses;
-
 
   const balance =
     income -
     totalCosts;
 
-
   const percentage =
     income > 0
       ? (totalCosts / income) * 100
       : 0;
-
 
   return {
     fixedIncome,
@@ -1992,24 +1775,20 @@ function renderCockpit() {
   const values =
     getMonthNumbers(currentMonth);
 
-
   document.getElementById(
     "cockpitIncome"
   ).textContent =
     formatCHF(values.income);
-
 
   document.getElementById(
     "cockpitFixed"
   ).textContent =
     formatCHF(values.fixedTotal);
 
-
   document.getElementById(
     "cockpitExpenses"
   ).textContent =
     formatCHF(values.expenses);
-
 
   setBalanceElement(
     "cockpitBalance",
@@ -2017,42 +1796,35 @@ function renderCockpit() {
     "overview-value"
   );
 
-
   document.getElementById(
     "cockpitFixedIncome"
   ).textContent =
     formatCHF(values.fixedIncome);
-
 
   document.getElementById(
     "cockpitExtraIncome"
   ).textContent =
     formatCHF(values.extraIncome);
 
-
   document.getElementById(
     "cockpitAnalysisIncome"
   ).textContent =
     formatCHF(values.income);
-
 
   document.getElementById(
     "cockpitAnalysisMonthlyFixed"
   ).textContent =
     formatCHF(values.monthlyFixed);
 
-
   document.getElementById(
     "cockpitAnalysisYearlyFixed"
   ).textContent =
     formatCHF(values.yearlyFixedMonthly);
 
-
   document.getElementById(
     "cockpitAnalysisExpenses"
   ).textContent =
     formatCHF(values.expenses);
-
 
   setBalanceElement(
     "cockpitAnalysisBalance",
@@ -2060,13 +1832,11 @@ function renderCockpit() {
     ""
   );
 
-
   document.getElementById(
     "cockpitPercentage"
   ).textContent =
     values.percentage.toFixed(1) +
     " %";
-
 
   document.getElementById(
     "cockpitProgressBar"
@@ -2077,7 +1847,7 @@ function renderCockpit() {
 }
 
 
-/* EINNAHMEN ANZEIGEN */
+/* EINNAHMEN */
 
 function renderIncomePage() {
 
@@ -2086,9 +1856,7 @@ function renderIncomePage() {
       "fixedIncomeList"
     );
 
-
   fixedList.innerHTML = "";
-
 
   if (
     data.fixedIncomeItems.length === 0
@@ -2099,22 +1867,18 @@ function renderIncomePage() {
 
   }
 
-
   data.fixedIncomeItems.forEach(
     item => {
 
       const row =
         document.createElement("div");
 
-
       row.className =
         "list-item";
-
 
       row.innerHTML = `
 
         <div class="list-info">
-
           <strong>
             ${escapeHtml(item.description)}
           </strong>
@@ -2122,7 +1886,6 @@ function renderIncomePage() {
           <small>
             gilt jeden Monat
           </small>
-
         </div>
 
         <div class="item-actions">
@@ -2147,12 +1910,10 @@ function renderIncomePage() {
 
       `;
 
-
       fixedList.appendChild(row);
 
     }
   );
-
 
   document.getElementById(
     "fixedIncomeTotal"
@@ -2161,12 +1922,10 @@ function renderIncomePage() {
       getFixedIncomeTotal()
     );
 
-
   document.getElementById(
     "extraIncomeButtonMonth"
   ).textContent =
     months[currentMonth];
-
 
   document.getElementById(
     "extraIncomeMonthTitle"
@@ -2174,21 +1933,15 @@ function renderIncomePage() {
     "· " +
     months[currentMonth];
 
-
   const extraList =
     document.getElementById(
       "extraIncomeList"
     );
 
-
   extraList.innerHTML = "";
 
-
   const extras =
-    data
-      .months[currentMonth]
-      .extraIncomes;
-
+    data.months[currentMonth].extraIncomes;
 
   if (
     extras.length === 0
@@ -2199,17 +1952,14 @@ function renderIncomePage() {
 
   }
 
-
   extras.forEach(
     item => {
 
       const row =
         document.createElement("div");
 
-
       row.className =
         "list-item";
-
 
       row.innerHTML = `
 
@@ -2247,34 +1997,28 @@ function renderIncomePage() {
 
       `;
 
-
       extraList.appendChild(row);
 
     }
   );
 
-
   const fixedTotal =
     getFixedIncomeTotal();
-
 
   const extraTotal =
     getExtraIncomeTotal(
       currentMonth
     );
 
-
   document.getElementById(
     "incomePageFixedTotal"
   ).textContent =
     formatCHF(fixedTotal);
 
-
   document.getElementById(
     "extraIncomeMonthTotal"
   ).textContent =
     formatCHF(extraTotal);
-
 
   document.getElementById(
     "incomePageGrandTotal"
@@ -2287,7 +2031,7 @@ function renderIncomePage() {
 }
 
 
-/* FIXKOSTEN ANZEIGEN */
+/* FIXKOSTEN */
 
 function renderFixedPage() {
 
@@ -2296,9 +2040,7 @@ function renderFixedPage() {
       "monthlyFixedList"
     );
 
-
   monthlyList.innerHTML = "";
-
 
   if (
     data.monthlyFixedItems.length === 0
@@ -2309,22 +2051,18 @@ function renderFixedPage() {
 
   }
 
-
   data.monthlyFixedItems.forEach(
     item => {
 
       const row =
         document.createElement("div");
 
-
       row.className =
         "list-item";
-
 
       row.innerHTML = `
 
         <div class="list-info">
-
           <strong>
             ${escapeHtml(item.name)}
           </strong>
@@ -2332,7 +2070,6 @@ function renderFixedPage() {
           <small>
             jeden Monat
           </small>
-
         </div>
 
         <div class="item-actions">
@@ -2357,21 +2094,17 @@ function renderFixedPage() {
 
       `;
 
-
       monthlyList.appendChild(row);
 
     }
   );
-
 
   const yearlyList =
     document.getElementById(
       "yearlyFixedList"
     );
 
-
   yearlyList.innerHTML = "";
-
 
   if (
     data.yearlyFixedItems.length === 0
@@ -2382,7 +2115,6 @@ function renderFixedPage() {
 
   }
 
-
   data.yearlyFixedItems.forEach(
     item => {
 
@@ -2390,19 +2122,15 @@ function renderFixedPage() {
         Number(item.amount || 0) /
         12;
 
-
       const row =
         document.createElement("div");
-
 
       row.className =
         "list-item";
 
-
       row.innerHTML = `
 
         <div class="list-info">
-
           <strong>
             ${escapeHtml(item.name)}
           </strong>
@@ -2411,7 +2139,6 @@ function renderFixedPage() {
             ${formatCHF(monthlyShare)}
             / Monat
           </small>
-
         </div>
 
         <div class="item-actions">
@@ -2436,54 +2163,44 @@ function renderFixedPage() {
 
       `;
 
-
       yearlyList.appendChild(row);
 
     }
   );
 
-
   const monthlyTotal =
     getMonthlyFixedTotal();
-
 
   const yearlyTotal =
     getYearlyFixedTotal();
 
-
   const yearlyMonthly =
     getYearlyFixedMonthly();
-
 
   document.getElementById(
     "monthlyFixedTotal"
   ).textContent =
     formatCHF(monthlyTotal);
 
-
   document.getElementById(
     "yearlyFixedTotal"
   ).textContent =
     formatCHF(yearlyTotal);
-
 
   document.getElementById(
     "yearlyFixedMonthlyTotal"
   ).textContent =
     formatCHF(yearlyMonthly);
 
-
   document.getElementById(
     "fixedSummaryMonthly"
   ).textContent =
     formatCHF(monthlyTotal);
 
-
   document.getElementById(
     "fixedSummaryYearlyMonthly"
   ).textContent =
     formatCHF(yearlyMonthly);
-
 
   document.getElementById(
     "fixedSummaryTotal"
@@ -2503,31 +2220,26 @@ function renderExpensesPage() {
   const values =
     getMonthNumbers(currentMonth);
 
-
   document.getElementById(
     "expenseMonthTitle"
   ).textContent =
     "· " +
     months[currentMonth];
 
-
   document.getElementById(
     "expenseAnalysisIncome"
   ).textContent =
     formatCHF(values.income);
-
 
   document.getElementById(
     "expenseAnalysisFixed"
   ).textContent =
     formatCHF(values.fixedTotal);
 
-
   document.getElementById(
     "expenseAnalysisExpenses"
   ).textContent =
     formatCHF(values.expenses);
-
 
   setBalanceElement(
     "expenseAnalysisBalance",
@@ -2535,21 +2247,15 @@ function renderExpensesPage() {
     "overview-value"
   );
 
-
   const list =
     document.getElementById(
       "expenseList"
     );
 
-
   list.innerHTML = "";
 
-
   const expenses =
-    data
-      .months[currentMonth]
-      .expenses;
-
+    data.months[currentMonth].expenses;
 
   if (
     expenses.length === 0
@@ -2560,17 +2266,19 @@ function renderExpensesPage() {
 
   }
 
-
   expenses.forEach(
     expense => {
 
       const row =
         document.createElement("div");
 
-
       row.className =
         "list-item";
 
+      const dateText =
+        expense.date
+          ? formatDate(expense.date)
+          : "Datum nicht vorhanden";
 
       row.innerHTML = `
 
@@ -2582,6 +2290,8 @@ function renderExpensesPage() {
 
           <small>
             ${escapeHtml(expense.category)}
+            ·
+            ${dateText}
           </small>
 
         </div>
@@ -2608,18 +2318,15 @@ function renderExpensesPage() {
 
       `;
 
-
       list.appendChild(row);
 
     }
   );
 
-
   document.getElementById(
     "expenseTotal"
   ).textContent =
     formatCHF(values.expenses);
-
 
   renderCategoryAnalysis();
 
@@ -2632,45 +2339,37 @@ function renderCategoryAnalysis() {
 
   const categories = {};
 
+  data.months[currentMonth].expenses.forEach(
+    expense => {
 
-  data
-    .months[currentMonth]
-    .expenses
-    .forEach(
-      expense => {
-
-        if (
-          !categories[
-            expense.category
-          ]
-        ) {
-
-          categories[
-            expense.category
-          ] = 0;
-
-        }
-
+      if (
+        !categories[
+          expense.category
+        ]
+      ) {
 
         categories[
           expense.category
-        ] +=
-          Number(
-            expense.amount || 0
-          );
+        ] = 0;
 
       }
-    );
 
+      categories[
+        expense.category
+      ] +=
+        Number(
+          expense.amount || 0
+        );
+
+    }
+  );
 
   const container =
     document.getElementById(
       "categoryAnalysis"
     );
 
-
   container.innerHTML = "";
-
 
   const entries =
     Object.entries(categories)
@@ -2678,7 +2377,6 @@ function renderCategoryAnalysis() {
         (a,b) =>
           b[1] - a[1]
       );
-
 
   if (
     entries.length === 0
@@ -2691,17 +2389,14 @@ function renderCategoryAnalysis() {
 
   }
 
-
   entries.forEach(
     ([category,amount]) => {
 
       const row =
         document.createElement("div");
 
-
       row.className =
         "summary-row";
-
 
       row.innerHTML = `
 
@@ -2714,7 +2409,6 @@ function renderCategoryAnalysis() {
         </strong>
 
       `;
-
 
       container.appendChild(row);
 
@@ -2733,9 +2427,7 @@ function renderYearOverview() {
       "yearTableBody"
     );
 
-
   body.innerHTML = "";
-
 
   let totalFixedIncome = 0;
   let totalExtraIncome = 0;
@@ -2744,7 +2436,6 @@ function renderYearOverview() {
   let totalYearlyFixed = 0;
   let totalExpenses = 0;
   let totalBalance = 0;
-
 
   for (
     let i = 0;
@@ -2755,38 +2446,29 @@ function renderYearOverview() {
     const values =
       getMonthNumbers(i);
 
-
     totalFixedIncome +=
       values.fixedIncome;
-
 
     totalExtraIncome +=
       values.extraIncome;
 
-
     totalIncome +=
       values.income;
-
 
     totalMonthlyFixed +=
       values.monthlyFixed;
 
-
     totalYearlyFixed +=
       values.yearlyFixedMonthly;
-
 
     totalExpenses +=
       values.expenses;
 
-
     totalBalance +=
       values.balance;
 
-
     const row =
       document.createElement("tr");
-
 
     row.innerHTML = `
 
@@ -2828,10 +2510,8 @@ function renderYearOverview() {
 
     `;
 
-
     row.style.cursor =
       "pointer";
-
 
     row.onclick = () => {
 
@@ -2841,47 +2521,39 @@ function renderYearOverview() {
 
     };
 
-
     body.appendChild(row);
 
   }
-
 
   document.getElementById(
     "yearFixedIncomeTotal"
   ).textContent =
     formatCHF(totalFixedIncome);
 
-
   document.getElementById(
     "yearExtraIncomeTotal"
   ).textContent =
     formatCHF(totalExtraIncome);
-
 
   document.getElementById(
     "yearIncomeTotal"
   ).textContent =
     formatCHF(totalIncome);
 
-
   document.getElementById(
     "yearMonthlyFixedTotal"
   ).textContent =
     formatCHF(totalMonthlyFixed);
-
 
   document.getElementById(
     "yearYearlyFixedTotal"
   ).textContent =
     formatCHF(totalYearlyFixed);
 
-
   document.getElementById(
     "yearExpenseTotal"
   ).textContent =
     formatCHF(totalExpenses);
-
 
   setBalanceElement(
     "yearBalanceTotal",
@@ -2901,43 +2573,29 @@ function updateHeader() {
       ".page.active"
     );
 
-
   let title =
     "Cockpit";
-
 
   if (
     activePage.id ===
     "pageIncome"
   ) {
-
-    title =
-      "Einnahmen";
-
+    title = "Einnahmen";
   }
-
 
   if (
     activePage.id ===
     "pageFixed"
   ) {
-
-    title =
-      "Fixkosten";
-
+    title = "Fixkosten";
   }
-
 
   if (
     activePage.id ===
     "pageExpenses"
   ) {
-
-    title =
-      "Ausgaben";
-
+    title = "Ausgaben";
   }
-
 
   if (
     activePage.id ===
@@ -2968,17 +2626,11 @@ function updateHeader() {
 function updateEverything() {
 
   renderMonthGrids();
-
   renderCockpit();
-
   renderIncomePage();
-
   renderFixedPage();
-
   renderExpensesPage();
-
   renderYearOverview();
-
   updateHeader();
 
 }
@@ -2999,6 +2651,33 @@ function formatCHF(value) {
   ).format(
     Number(value || 0)
   );
+
+}
+
+
+function formatDate(dateValue) {
+
+  const date =
+    new Date(dateValue);
+
+  if (
+    isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return "";
+
+  }
+
+  return new Intl.DateTimeFormat(
+    "de-CH",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }
+  ).format(date);
 
 }
 
@@ -3040,10 +2719,8 @@ function setBalanceElement(
       elementId
     );
 
-
   element.textContent =
     formatCHF(value);
-
 
   element.className =
     (
@@ -3064,7 +2741,6 @@ function setBalanceElement(
 
 initializeData();
 
-/* Beim Öffnen immer aktueller Kalendermonat */
 currentMonth =
   new Date().getMonth();
 
