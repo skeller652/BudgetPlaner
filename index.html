@@ -2,7 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#0f172a">
@@ -16,31 +17,51 @@
       padding: 0;
     }
 
+    :root {
+      --dark: #0f172a;
+      --dark2: #1e293b;
+      --blue: #2563eb;
+      --green: #16a34a;
+      --red: #dc2626;
+      --orange: #ea580c;
+      --gray: #64748b;
+      --light: #f1f5f9;
+      --border: #e2e8f0;
+      --white: #ffffff;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f1f5f9;
-      color: #0f172a;
-      padding-bottom: 100px;
+      background: var(--light);
+      color: var(--dark);
+
+      padding-bottom: calc(100px + env(safe-area-inset-bottom));
     }
 
     header {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
+      background: linear-gradient(135deg, var(--dark), var(--dark2));
       color: white;
-      padding: 24px 18px;
+
+      padding:
+        calc(22px + env(safe-area-inset-top))
+        18px
+        22px;
+
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 20;
+
       box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
 
     header h1 {
-      font-size: 28px;
-      margin-bottom: 5px;
+      font-size: 27px;
+      margin-bottom: 4px;
     }
 
     header p {
-      color: #cbd5e1;
       font-size: 14px;
+      color: #cbd5e1;
     }
 
     .container {
@@ -49,72 +70,103 @@
       padding: 18px;
     }
 
-    .overview {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 750;
+      margin: 23px 0 12px;
+    }
+
+    .sub-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 15px;
     }
 
     .card {
       background: white;
       border-radius: 18px;
       padding: 18px;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+      box-shadow: 0 4px 16px rgba(15,23,42,0.08);
     }
 
-    .card-title {
-      font-size: 13px;
-      color: #64748b;
-      margin-bottom: 8px;
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
     }
 
-    .card-value {
-      font-size: 22px;
-      font-weight: 700;
+    .overview-card {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.08);
+    }
+
+    .overview-label {
+      color: var(--gray);
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .overview-value {
+      font-size: 21px;
+      font-weight: 750;
     }
 
     .positive {
-      color: #16a34a;
+      color: var(--green);
     }
 
     .negative {
-      color: #dc2626;
+      color: var(--red);
     }
 
-    .section-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin: 24px 0 12px;
-    }
-
-    .sub-title {
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-
-    select,
     input,
+    select,
     button {
       width: 100%;
-      padding: 13px;
       border-radius: 12px;
-      border: 1px solid #cbd5e1;
+      padding: 13px;
       font-size: 16px;
+    }
+
+    input,
+    select {
       background: white;
+      border: 1px solid #cbd5e1;
     }
 
     input:focus,
     select:focus {
-      outline: 2px solid #2563eb;
-      border-color: #2563eb;
+      outline: 2px solid rgba(37,99,235,0.3);
+      border-color: var(--blue);
+    }
+
+    button {
+      border: none;
+      background: var(--blue);
+      color: white;
+      font-weight: 650;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    button:active {
+      transform: scale(0.985);
     }
 
     label {
       display: block;
       font-size: 13px;
-      color: #64748b;
+      color: var(--gray);
       margin-bottom: 5px;
     }
 
@@ -122,37 +174,12 @@
       margin-bottom: 14px;
     }
 
-    button {
-      border: none;
-      background: #2563eb;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 6px;
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
     .secondary-btn {
-      background: #0f172a;
+      background: var(--dark);
     }
 
-    .edit-btn {
-      width: auto;
-      background: #64748b;
-      padding: 7px 10px;
-      font-size: 12px;
-      margin: 0 5px 0 8px;
-    }
-
-    .delete-btn {
-      width: auto;
+    .danger-btn {
       background: #ef4444;
-      padding: 7px 10px;
-      font-size: 12px;
-      margin: 0;
     }
 
     .month-grid {
@@ -163,7 +190,7 @@
 
     .month-btn {
       background: white;
-      color: #0f172a;
+      color: var(--dark);
       border: 1px solid #cbd5e1;
       padding: 10px;
       font-size: 14px;
@@ -171,44 +198,44 @@
     }
 
     .month-btn.active {
-      background: #2563eb;
+      background: var(--blue);
+      border-color: var(--blue);
       color: white;
-      border-color: #2563eb;
     }
 
-    .expense-list {
+    .list {
       margin-top: 15px;
     }
 
-    .expense-item {
+    .list-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
       padding: 13px 0;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--border);
     }
 
-    .expense-item:last-child {
+    .list-item:last-child {
       border-bottom: none;
     }
 
-    .expense-info {
+    .list-info {
       flex: 1;
       min-width: 0;
     }
 
-    .expense-info strong {
+    .list-info strong {
       display: block;
       margin-bottom: 3px;
       word-break: break-word;
     }
 
-    .expense-info small {
-      color: #64748b;
+    .list-info small {
+      color: var(--gray);
     }
 
-    .expense-value {
+    .item-value {
       font-weight: 700;
       white-space: nowrap;
     }
@@ -216,19 +243,34 @@
     .item-actions {
       display: flex;
       align-items: center;
-      flex-shrink: 0;
+      gap: 5px;
     }
 
-    .summary-box {
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 2px solid #e2e8f0;
+    .small-btn {
+      width: auto;
+      padding: 7px 9px;
+      margin: 0;
+      font-size: 12px;
+    }
+
+    .edit-btn {
+      background: #64748b;
+    }
+
+    .delete-btn {
+      background: #ef4444;
+    }
+
+    .summary {
+      border-top: 2px solid var(--border);
+      margin-top: 16px;
+      padding-top: 12px;
     }
 
     .summary-row {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      gap: 15px;
       padding: 7px 0;
     }
 
@@ -236,19 +278,31 @@
       white-space: nowrap;
     }
 
+    .big-summary {
+      font-size: 18px;
+      font-weight: 750;
+    }
+
     .progress {
       height: 12px;
-      background: #e2e8f0;
-      border-radius: 20px;
+      border-radius: 30px;
+      background: var(--border);
       overflow: hidden;
       margin-top: 12px;
     }
 
     .progress-bar {
       height: 100%;
-      background: #2563eb;
       width: 0%;
+      background: var(--blue);
       transition: width 0.3s;
+    }
+
+    .hint {
+      color: var(--gray);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 10px;
     }
 
     .year-table-wrapper {
@@ -258,58 +312,90 @@
 
     .year-table {
       width: 100%;
-      border-collapse: collapse;
       min-width: 850px;
+      border-collapse: collapse;
     }
 
     .year-table th,
     .year-table td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #e2e8f0;
       text-align: right;
+      padding: 11px 9px;
+      border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
 
     .year-table th {
       background: #f8fafc;
       color: #475569;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .year-table th:first-child,
     .year-table td:first-child {
       text-align: left;
+      font-weight: 650;
+    }
+
+    .total-row {
+      background: #f1f5f9;
+      font-weight: 750;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      z-index: 100;
+
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+
+      background: rgba(255,255,255,0.97);
+      border-top: 1px solid #dbe3ec;
+
+      padding-bottom: env(safe-area-inset-bottom);
+
+      box-shadow: 0 -3px 18px rgba(15,23,42,0.10);
+
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .nav-btn {
+      background: transparent;
+      color: #64748b;
+      border: none;
+      border-radius: 0;
+
+      padding: 10px 3px 8px;
+      margin: 0;
+
+      font-size: 11px;
       font-weight: 600;
     }
 
-    .year-table .total-row {
-      font-weight: 700;
-      background: #f1f5f9;
+    .nav-icon {
+      display: block;
+      font-size: 21px;
+      margin-bottom: 3px;
     }
 
-    .positive-value {
-      color: #16a34a;
-    }
-
-    .negative-value {
-      color: #dc2626;
-    }
-
-    .hint {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #64748b;
-      line-height: 1.5;
+    .nav-btn.active {
+      color: var(--blue);
+      background: #eff6ff;
     }
 
     .footer-info {
       text-align: center;
       color: #94a3b8;
       font-size: 12px;
-      padding-top: 30px;
+      padding: 28px 0;
     }
 
     @media (min-width: 700px) {
+
       .overview {
         grid-template-columns: repeat(4, 1fr);
       }
@@ -319,24 +405,19 @@
       }
     }
 
-    @media (max-width: 500px) {
-      .expense-item {
+    @media (max-width: 520px) {
+
+      .overview-value {
+        font-size: 18px;
+      }
+
+      .list-item {
         align-items: flex-start;
       }
 
       .item-actions {
         flex-direction: column;
         align-items: flex-end;
-        gap: 5px;
-      }
-
-      .edit-btn,
-      .delete-btn {
-        margin: 0;
-      }
-
-      .card-value {
-        font-size: 19px;
       }
     }
   </style>
@@ -346,428 +427,697 @@
 
 <header>
   <h1>Budgetplaner</h1>
-  <p id="headerMonth">Deine Finanzen einfach im Überblick</p>
+  <p id="headerSubtitle">Cockpit</p>
 </header>
+
 
 <div class="container">
 
-  <!-- ÜBERSICHT -->
-  <div class="overview">
+  <!-- ==============================
+       COCKPIT
+  =============================== -->
 
-    <div class="card">
-      <div class="card-title">Einnahmen</div>
-      <div class="card-value positive" id="incomeDisplay">
-        CHF 0.00
+  <section id="pageCockpit" class="page active">
+
+    <div class="section-title">
+      Cockpit
+    </div>
+
+    <div class="overview">
+
+      <div class="overview-card">
+        <div class="overview-label">
+          Einnahmen
+        </div>
+        <div
+          class="overview-value positive"
+          id="cockpitIncome">
+          CHF 0.00
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <div class="card-title">Fixkosten</div>
-      <div class="card-value" id="fixedDisplay">
-        CHF 0.00
+
+      <div class="overview-card">
+        <div class="overview-label">
+          Fixkosten / Monat
+        </div>
+        <div
+          class="overview-value"
+          id="cockpitFixed">
+          CHF 0.00
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <div class="card-title">Ausgaben</div>
-      <div class="card-value" id="variableDisplay">
-        CHF 0.00
+
+      <div class="overview-card">
+        <div class="overview-label">
+          Ausgaben
+        </div>
+        <div
+          class="overview-value"
+          id="cockpitExpenses">
+          CHF 0.00
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <div class="card-title">Restbudget</div>
-      <div class="card-value" id="balanceDisplay">
-        CHF 0.00
+
+      <div class="overview-card">
+        <div class="overview-label">
+          Restbudget
+        </div>
+        <div
+          class="overview-value"
+          id="cockpitBalance">
+          CHF 0.00
+        </div>
       </div>
+
     </div>
 
-  </div>
 
-
-  <!-- MONAT -->
-  <div class="section-title">
-    Monat auswählen
-  </div>
-
-  <div
-    class="month-grid"
-    id="monthGrid">
-  </div>
-
-
-  <!-- EINNAHMEN -->
-  <div class="section-title">
-    Einnahmen
-  </div>
-
-  <div class="card">
-
-    <div class="form-group">
-      <label>
-        Einnahmen im ausgewählten Monat
-      </label>
-
-      <input
-        type="number"
-        id="income"
-        placeholder="z.B. 8300"
-        step="0.01"
-      >
+    <div class="section-title">
+      Monat auswählen
     </div>
-
-    <button onclick="saveIncomeCurrentMonth()">
-      Nur für diesen Monat speichern
-    </button>
-
-    <button
-      class="secondary-btn"
-      onclick="saveIncomeAllMonths()">
-      Für alle 12 Monate übernehmen
-    </button>
-
-    <div class="hint">
-      Du kannst zuerst einen Standardbetrag auf alle Monate
-      übertragen und danach einzelne Monate separat anpassen.
-    </div>
-
-  </div>
-
-
-  <!-- MONATLICHE FIXKOSTEN -->
-  <div class="section-title">
-    Monatliche Fixkosten
-  </div>
-
-  <div class="card">
-
-    <div class="sub-title">
-      Fixkosten erfassen
-    </div>
-
-    <div class="form-group">
-      <label>Bezeichnung</label>
-
-      <input
-        type="text"
-        id="monthlyFixedName"
-        placeholder="z.B. Miete"
-      >
-    </div>
-
-    <div class="form-group">
-      <label>Betrag pro Monat CHF</label>
-
-      <input
-        type="number"
-        id="monthlyFixedAmount"
-        placeholder="0.00"
-        step="0.01"
-      >
-    </div>
-
-    <button onclick="addMonthlyFixedCurrentMonth()">
-      Nur diesem Monat hinzufügen
-    </button>
-
-    <button
-      class="secondary-btn"
-      onclick="addMonthlyFixedAllMonths()">
-      Für alle 12 Monate übernehmen
-    </button>
 
     <div
-      class="expense-list"
-      id="monthlyFixedList">
+      id="cockpitMonthGrid"
+      class="month-grid">
     </div>
 
-    <div class="summary-box">
-      <div class="summary-row">
-        <span>Monatliche Fixkosten gesamt</span>
-        <strong id="monthlyFixedTotal">
-          CHF 0.00
-        </strong>
-      </div>
+
+    <div class="section-title">
+      Monatsauswertung
     </div>
 
-  </div>
-
-
-  <!-- JÄHRLICHE FIXKOSTEN -->
-  <div class="section-title">
-    Jährliche Fixkosten
-  </div>
-
-  <div class="card">
-
-    <div class="sub-title">
-      Jährliche Fixkosten erfassen
-    </div>
-
-    <div class="form-group">
-      <label>Bezeichnung</label>
-
-      <input
-        type="text"
-        id="yearlyFixedName"
-        placeholder="z.B. Auto Versicherung"
-      >
-    </div>
-
-    <div class="form-group">
-      <label>Jahresbetrag CHF</label>
-
-      <input
-        type="number"
-        id="yearlyFixedAmount"
-        placeholder="0.00"
-        step="0.01"
-      >
-    </div>
-
-    <button onclick="addYearlyFixedCurrentMonth()">
-      Nur diesem Monat hinzufügen
-    </button>
-
-    <button
-      class="secondary-btn"
-      onclick="addYearlyFixedAllMonths()">
-      Für alle 12 Monate übernehmen
-    </button>
-
-    <div
-      class="expense-list"
-      id="yearlyFixedList">
-    </div>
-
-    <div class="summary-box">
-
-      <div class="summary-row">
-        <span>Jährliche Fixkosten gesamt</span>
-        <strong id="yearlyFixedTotal">
-          CHF 0.00
-        </strong>
-      </div>
-
-      <div class="summary-row">
-        <span>Anteil pro Monat</span>
-        <strong id="yearlyFixedMonthly">
-          CHF 0.00
-        </strong>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- AUSGABEN -->
-  <div class="section-title">
-    Neue Ausgabe
-  </div>
-
-  <div class="card">
-
-    <div class="form-group">
-      <label>Beschreibung</label>
-
-      <input
-        type="text"
-        id="expenseName"
-        placeholder="z.B. Einkaufen"
-      >
-    </div>
-
-    <div class="form-group">
-
-      <label>Kategorie</label>
-
-      <select id="expenseCategory">
-        <option>Lebensmittel</option>
-        <option>Restaurant</option>
-        <option>Auto</option>
-        <option>Freizeit</option>
-        <option>Shopping</option>
-        <option>Reisen</option>
-        <option>Gesundheit</option>
-        <option>Haushalt</option>
-        <option>Ferien</option>
-        <option>Geschenke</option>
-        <option>Sonstiges</option>
-      </select>
-
-    </div>
-
-    <div class="form-group">
-      <label>Betrag CHF</label>
-
-      <input
-        type="number"
-        id="expenseAmount"
-        placeholder="0.00"
-        step="0.01"
-      >
-    </div>
-
-    <button onclick="addExpense()">
-      Ausgabe hinzufügen
-    </button>
-
-  </div>
-
-
-  <!-- MONATSANALYSE -->
-  <div class="section-title">
-    Monatsanalyse
-  </div>
-
-  <div class="card">
-
-    <div>
-      Ausgabenquote:
-      <strong id="percentageDisplay">
-        0 %
-      </strong>
-    </div>
-
-    <div class="progress">
-      <div
-        class="progress-bar"
-        id="progressBar">
-      </div>
-    </div>
-
-    <div class="summary-box">
+    <div class="card">
 
       <div class="summary-row">
         <span>Einnahmen</span>
         <strong
           class="positive"
-          id="analysisIncome">
+          id="cockpitAnalysisIncome">
           CHF 0.00
         </strong>
       </div>
 
       <div class="summary-row">
         <span>Monatliche Fixkosten</span>
-        <strong id="analysisMonthlyFixed">
+        <strong id="cockpitAnalysisMonthlyFixed">
           CHF 0.00
         </strong>
       </div>
 
       <div class="summary-row">
         <span>Jährliche Fixkosten / Monat</span>
-        <strong id="analysisYearlyFixed">
+        <strong id="cockpitAnalysisYearlyFixed">
           CHF 0.00
         </strong>
       </div>
 
       <div class="summary-row">
         <span>Ausgaben</span>
-        <strong id="analysisVariable">
+        <strong id="cockpitAnalysisExpenses">
           CHF 0.00
         </strong>
       </div>
 
-      <div class="summary-row">
-        <span>Gesamtkosten</span>
-        <strong id="analysisTotal">
-          CHF 0.00
-        </strong>
-      </div>
-
-      <div class="summary-row">
+      <div class="summary-row big-summary">
         <span>Restbudget</span>
-        <strong id="analysisBalance">
+        <strong id="cockpitAnalysisBalance">
+          CHF 0.00
+        </strong>
+      </div>
+
+
+      <div class="progress">
+        <div
+          class="progress-bar"
+          id="cockpitProgressBar">
+        </div>
+      </div>
+
+      <div class="hint">
+        Gesamtkosten in Prozent der Einnahmen:
+        <strong id="cockpitPercentage">
+          0 %
+        </strong>
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      Jahresübersicht
+    </div>
+
+    <div class="card">
+
+      <div class="year-table-wrapper">
+
+        <table class="year-table">
+
+          <thead>
+            <tr>
+              <th>Monat</th>
+              <th>Einnahmen</th>
+              <th>Fixkosten Monat</th>
+              <th>Fixkosten Jahr / Monat</th>
+              <th>Ausgaben</th>
+              <th>Restbudget</th>
+            </tr>
+          </thead>
+
+          <tbody id="yearTableBody">
+          </tbody>
+
+          <tfoot>
+
+            <tr class="total-row">
+
+              <td>Gesamt</td>
+
+              <td id="yearIncomeTotal">
+                CHF 0.00
+              </td>
+
+              <td id="yearMonthlyFixedTotal">
+                CHF 0.00
+              </td>
+
+              <td id="yearYearlyFixedTotal">
+                CHF 0.00
+              </td>
+
+              <td id="yearExpenseTotal">
+                CHF 0.00
+              </td>
+
+              <td id="yearBalanceTotal">
+                CHF 0.00
+              </td>
+
+            </tr>
+
+          </tfoot>
+
+        </table>
+
+      </div>
+
+      <div class="hint">
+        Die Fixkosten gelten für alle Monate.
+        Nur Einnahmen und Ausgaben werden monatlich ausgewertet.
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ==============================
+       EINNAHMEN
+  =============================== -->
+
+  <section id="pageIncome" class="page">
+
+    <div class="section-title">
+      Einnahmen
+    </div>
+
+
+    <div class="card">
+
+      <div class="sub-title">
+        Monat auswählen
+      </div>
+
+      <div
+        id="incomeMonthGrid"
+        class="month-grid">
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      Einnahmen erfassen
+    </div>
+
+    <div class="card">
+
+      <div class="form-group">
+
+        <label>
+          Einnahmen für
+          <span id="incomeSelectedMonth">
+          </span>
+        </label>
+
+        <input
+          type="number"
+          id="incomeInput"
+          placeholder="z.B. 8300"
+          step="0.01"
+        >
+
+      </div>
+
+
+      <button onclick="saveIncomeCurrentMonth()">
+        Für diesen Monat speichern
+      </button>
+
+
+      <button
+        class="secondary-btn"
+        onclick="saveIncomeAllMonths()">
+        Diesen Betrag für alle Monate übernehmen
+      </button>
+
+
+      <div class="hint">
+        Du kannst einen Standardbetrag für alle Monate setzen
+        und danach einzelne Monate individuell ändern.
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      Einnahmen Jahresübersicht
+    </div>
+
+    <div class="card">
+
+      <div id="incomeYearList">
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ==============================
+       FIXKOSTEN
+  =============================== -->
+
+  <section id="pageFixed" class="page">
+
+    <div class="section-title">
+      Monatliche Fixkosten
+    </div>
+
+    <div class="card">
+
+      <div class="hint" style="margin-top:0;margin-bottom:15px;">
+        Diese Kosten gelten automatisch für alle 12 Monate.
+      </div>
+
+      <div class="form-group">
+
+        <label>
+          Bezeichnung
+        </label>
+
+        <input
+          id="monthlyFixedName"
+          type="text"
+          placeholder="z.B. Miete"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Betrag pro Monat CHF
+        </label>
+
+        <input
+          id="monthlyFixedAmount"
+          type="number"
+          placeholder="0.00"
+          step="0.01"
+        >
+
+      </div>
+
+
+      <button onclick="addMonthlyFixed()">
+        Monatliche Fixkosten hinzufügen
+      </button>
+
+
+      <div
+        id="monthlyFixedList"
+        class="list">
+      </div>
+
+
+      <div class="summary">
+
+        <div class="summary-row big-summary">
+          <span>Gesamt pro Monat</span>
+
+          <strong id="monthlyFixedTotal">
+            CHF 0.00
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="section-title">
+      Jährliche Fixkosten
+    </div>
+
+    <div class="card">
+
+      <div class="hint" style="margin-top:0;margin-bottom:15px;">
+        Der Jahresbetrag wird automatisch durch 12 geteilt
+        und jedem Monat belastet.
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Bezeichnung
+        </label>
+
+        <input
+          id="yearlyFixedName"
+          type="text"
+          placeholder="z.B. Autoversicherung"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Jahresbetrag CHF
+        </label>
+
+        <input
+          id="yearlyFixedAmount"
+          type="number"
+          placeholder="0.00"
+          step="0.01"
+        >
+
+      </div>
+
+
+      <button onclick="addYearlyFixed()">
+        Jährliche Fixkosten hinzufügen
+      </button>
+
+
+      <div
+        id="yearlyFixedList"
+        class="list">
+      </div>
+
+
+      <div class="summary">
+
+        <div class="summary-row">
+          <span>Gesamt pro Jahr</span>
+
+          <strong id="yearlyFixedTotal">
+            CHF 0.00
+          </strong>
+        </div>
+
+
+        <div class="summary-row big-summary">
+          <span>Anteil pro Monat</span>
+
+          <strong id="yearlyFixedMonthlyTotal">
+            CHF 0.00
+          </strong>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      Fixkosten gesamt
+    </div>
+
+    <div class="card">
+
+      <div class="summary-row">
+        <span>Monatliche Fixkosten</span>
+
+        <strong id="fixedSummaryMonthly">
+          CHF 0.00
+        </strong>
+      </div>
+
+
+      <div class="summary-row">
+        <span>Jährliche Fixkosten / Monat</span>
+
+        <strong id="fixedSummaryYearlyMonthly">
+          CHF 0.00
+        </strong>
+      </div>
+
+
+      <div class="summary-row big-summary">
+        <span>Fixkosten total / Monat</span>
+
+        <strong id="fixedSummaryTotal">
           CHF 0.00
         </strong>
       </div>
 
     </div>
 
-  </div>
+  </section>
 
 
-  <!-- AUSGABENLISTE -->
-  <div class="section-title">
-    Ausgaben
-  </div>
 
-  <div class="card">
+  <!-- ==============================
+       AUSGABEN
+  =============================== -->
 
-    <div
-      class="expense-list"
-      id="expenseList">
+  <section id="pageExpenses" class="page">
+
+    <div class="section-title">
+      Ausgaben
     </div>
 
-  </div>
 
+    <div class="card">
 
-  <!-- JAHRESÜBERSICHT -->
-  <div class="section-title">
-    Jahresübersicht
-  </div>
+      <div class="sub-title">
+        Monat auswählen
+      </div>
 
-  <div class="card">
-
-    <div class="year-table-wrapper">
-
-      <table class="year-table">
-
-        <thead>
-
-          <tr>
-            <th>Monat</th>
-            <th>Einnahmen</th>
-            <th>Monatliche Fixkosten</th>
-            <th>Jährliche Fixkosten</th>
-            <th>Ausgaben</th>
-            <th>Restbudget</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="yearTableBody">
-        </tbody>
-
-        <tfoot>
-
-          <tr class="total-row">
-            <td>Gesamt</td>
-
-            <td id="totalYearIncome">
-              CHF 0.00
-            </td>
-
-            <td id="totalMonthlyFixed">
-              CHF 0.00
-            </td>
-
-            <td id="totalYearlyFixed">
-              CHF 0.00
-            </td>
-
-            <td id="totalVariableExpenses">
-              CHF 0.00
-            </td>
-
-            <td id="totalYearBalance">
-              CHF 0.00
-            </td>
-          </tr>
-
-        </tfoot>
-
-      </table>
+      <div
+        id="expenseMonthGrid"
+        class="month-grid">
+      </div>
 
     </div>
 
-    <div class="hint">
-      Auf dem iPhone kannst du die Tabelle nach links
-      und rechts wischen.
+
+    <div class="section-title">
+      Neue Ausgabe
     </div>
 
-  </div>
+    <div class="card">
+
+      <div class="form-group">
+
+        <label>
+          Beschreibung
+        </label>
+
+        <input
+          id="expenseName"
+          type="text"
+          placeholder="z.B. Einkaufen"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Kategorie
+        </label>
+
+        <select id="expenseCategory">
+
+          <option>Lebensmittel</option>
+          <option>Restaurant</option>
+          <option>Auto</option>
+          <option>Freizeit</option>
+          <option>Shopping</option>
+          <option>Reisen</option>
+          <option>Gesundheit</option>
+          <option>Haushalt</option>
+          <option>Ferien</option>
+          <option>Geschenke</option>
+          <option>Sonstiges</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Betrag CHF
+        </label>
+
+        <input
+          id="expenseAmount"
+          type="number"
+          placeholder="0.00"
+          step="0.01"
+        >
+
+      </div>
+
+
+      <button onclick="addExpense()">
+        Ausgabe hinzufügen
+      </button>
+
+    </div>
+
+
+
+    <div class="section-title">
+      Auswertung
+      <span id="expenseMonthTitle">
+      </span>
+    </div>
+
+    <div class="overview">
+
+      <div class="overview-card">
+
+        <div class="overview-label">
+          Einnahmen
+        </div>
+
+        <div
+          id="expenseAnalysisIncome"
+          class="overview-value positive">
+          CHF 0.00
+        </div>
+
+      </div>
+
+
+      <div class="overview-card">
+
+        <div class="overview-label">
+          Fixkosten
+        </div>
+
+        <div
+          id="expenseAnalysisFixed"
+          class="overview-value">
+          CHF 0.00
+        </div>
+
+      </div>
+
+
+      <div class="overview-card">
+
+        <div class="overview-label">
+          Ausgaben
+        </div>
+
+        <div
+          id="expenseAnalysisExpenses"
+          class="overview-value">
+          CHF 0.00
+        </div>
+
+      </div>
+
+
+      <div class="overview-card">
+
+        <div class="overview-label">
+          Restbudget
+        </div>
+
+        <div
+          id="expenseAnalysisBalance"
+          class="overview-value">
+          CHF 0.00
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="section-title">
+      Ausgabenliste
+    </div>
+
+    <div class="card">
+
+      <div
+        id="expenseList"
+        class="list">
+      </div>
+
+
+      <div class="summary">
+
+        <div class="summary-row big-summary">
+
+          <span>
+            Ausgaben im Monat
+          </span>
+
+          <strong id="expenseTotal">
+            CHF 0.00
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      Ausgaben nach Kategorie
+    </div>
+
+    <div class="card">
+
+      <div id="categoryAnalysis">
+      </div>
+
+    </div>
+
+  </section>
 
 
   <div class="footer-info">
@@ -777,7 +1127,77 @@
 </div>
 
 
+
+<!-- ==============================
+     BOTTOM NAVIGATION
+=============================== -->
+
+<nav class="bottom-nav">
+
+  <button
+    id="navCockpit"
+    class="nav-btn active"
+    onclick="showPage('cockpit')">
+
+    <span class="nav-icon">
+      ◉
+    </span>
+
+    Cockpit
+
+  </button>
+
+
+  <button
+    id="navIncome"
+    class="nav-btn"
+    onclick="showPage('income')">
+
+    <span class="nav-icon">
+      ＋
+    </span>
+
+    Einnahmen
+
+  </button>
+
+
+  <button
+    id="navFixed"
+    class="nav-btn"
+    onclick="showPage('fixed')">
+
+    <span class="nav-icon">
+      ▣
+    </span>
+
+    Fixkosten
+
+  </button>
+
+
+  <button
+    id="navExpenses"
+    class="nav-btn"
+    onclick="showPage('expenses')">
+
+    <span class="nav-icon">
+      −
+    </span>
+
+    Ausgaben
+
+  </button>
+
+</nav>
+
+
+
 <script>
+
+/* ==========================================
+   GRUNDDATEN
+========================================== */
 
 const months = [
   "Januar",
@@ -801,191 +1221,320 @@ let currentMonth =
 
 let data =
   JSON.parse(
-    localStorage.getItem("budgetData")
-  ) || {};
+    localStorage.getItem("budgetDataV3")
+  ) || {
+    monthlyFixedItems: [],
+    yearlyFixedItems: [],
+    months: {}
+  };
 
 
-/* =========================
-   MONAT INITIALISIEREN
-========================= */
+/* ==========================================
+   MIGRATION / INITIALISIERUNG
+========================================== */
 
-function ensureMonth(index) {
+function initializeData() {
 
-  if (!data[index]) {
+  if (!data.monthlyFixedItems) {
+    data.monthlyFixedItems = [];
+  }
 
-    data[index] = {
-      income: 0,
-      monthlyFixedItems: [],
-      yearlyFixedItems: [],
-      expenses: []
-    };
+  if (!data.yearlyFixedItems) {
+    data.yearlyFixedItems = [];
+  }
 
+  if (!data.months) {
+    data.months = {};
   }
 
 
-  /* Alte Version übernehmen */
+  for (let i = 0; i < 12; i++) {
 
-  if (!data[index].monthlyFixedItems) {
+    if (!data.months[i]) {
 
-    data[index].monthlyFixedItems = [];
-
-    if (data[index].monthlyFixed) {
-
-      data[index].monthlyFixedItems.push({
-
-        id:
-          Date.now() +
-          index +
-          Math.floor(Math.random() * 1000),
-
-        name:
-          "Bisherige monatliche Fixkosten",
-
-        amount:
-          Number(
-            data[index].monthlyFixed
-          ) || 0
-
-      });
+      data.months[i] = {
+        income: 0,
+        expenses: []
+      };
 
     }
 
-  }
+    if (!Array.isArray(
+      data.months[i].expenses
+    )) {
 
-
-  if (!data[index].yearlyFixedItems) {
-
-    data[index].yearlyFixedItems = [];
-
-    if (data[index].yearlyFixed) {
-
-      data[index].yearlyFixedItems.push({
-
-        id:
-          Date.now() +
-          10000 +
-          index +
-          Math.floor(Math.random() * 1000),
-
-        name:
-          "Bisherige jährliche Fixkosten",
-
-        amount:
-          Number(
-            data[index].yearlyFixed
-          ) || 0
-
-      });
+      data.months[i].expenses = [];
 
     }
 
-  }
-
-
-  if (!data[index].expenses) {
-    data[index].expenses = [];
   }
 
 }
 
 
-/* =========================
-   MONATE
-========================= */
+/* ==========================================
+   SPEICHERN
+========================================== */
 
-function renderMonths() {
+function saveData() {
 
-  const grid =
-    document.getElementById(
-      "monthGrid"
-    );
-
-  grid.innerHTML = "";
-
-
-  months.forEach(
-    (month, index) => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.textContent =
-        month;
-
-      button.className =
-        "month-btn" +
-        (
-          index === currentMonth
-            ? " active"
-            : ""
-        );
-
-
-      button.onclick = () => {
-
-        currentMonth =
-          index;
-
-        loadMonth();
-
-        renderMonths();
-
-      };
-
-
-      grid.appendChild(
-        button
-      );
-
-    }
+  localStorage.setItem(
+    "budgetDataV3",
+    JSON.stringify(data)
   );
 
 }
 
 
-/* =========================
+/* ==========================================
+   SEITENWECHSEL
+========================================== */
+
+function showPage(page) {
+
+  const pages = [
+    "Cockpit",
+    "Income",
+    "Fixed",
+    "Expenses"
+  ];
+
+
+  pages.forEach(name => {
+
+    document
+      .getElementById(
+        "page" + name
+      )
+      .classList
+      .remove("active");
+
+
+    document
+      .getElementById(
+        "nav" + name
+      )
+      .classList
+      .remove("active");
+
+  });
+
+
+  if (page === "cockpit") {
+
+    document
+      .getElementById("pageCockpit")
+      .classList
+      .add("active");
+
+    document
+      .getElementById("navCockpit")
+      .classList
+      .add("active");
+
+    document.getElementById(
+      "headerSubtitle"
+    ).textContent =
+      "Cockpit · " +
+      months[currentMonth];
+
+  }
+
+
+  if (page === "income") {
+
+    document
+      .getElementById("pageIncome")
+      .classList
+      .add("active");
+
+    document
+      .getElementById("navIncome")
+      .classList
+      .add("active");
+
+    document.getElementById(
+      "headerSubtitle"
+    ).textContent =
+      "Einnahmen · " +
+      months[currentMonth];
+
+  }
+
+
+  if (page === "fixed") {
+
+    document
+      .getElementById("pageFixed")
+      .classList
+      .add("active");
+
+    document
+      .getElementById("navFixed")
+      .classList
+      .add("active");
+
+    document.getElementById(
+      "headerSubtitle"
+    ).textContent =
+      "Fixkosten";
+
+  }
+
+
+  if (page === "expenses") {
+
+    document
+      .getElementById("pageExpenses")
+      .classList
+      .add("active");
+
+    document
+      .getElementById("navExpenses")
+      .classList
+      .add("active");
+
+    document.getElementById(
+      "headerSubtitle"
+    ).textContent =
+      "Ausgaben · " +
+      months[currentMonth];
+
+  }
+
+
+  updateEverything();
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+/* ==========================================
+   MONATSAUSWAHL
+========================================== */
+
+function renderMonthGrids() {
+
+  const grids = [
+    "cockpitMonthGrid",
+    "incomeMonthGrid",
+    "expenseMonthGrid"
+  ];
+
+
+  grids.forEach(gridId => {
+
+    const grid =
+      document.getElementById(
+        gridId
+      );
+
+
+    grid.innerHTML = "";
+
+
+    months.forEach(
+      (month, index) => {
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.className =
+          "month-btn" +
+          (
+            index === currentMonth
+              ? " active"
+              : ""
+          );
+
+
+        button.textContent =
+          month;
+
+
+        button.onclick = () => {
+
+          currentMonth =
+            index;
+
+          updateEverything();
+
+        };
+
+
+        grid.appendChild(
+          button
+        );
+
+      }
+    );
+
+  });
+
+}
+
+
+/* ==========================================
    EINNAHMEN
-========================= */
+========================================== */
 
 function saveIncomeCurrentMonth() {
 
-  ensureMonth(
-    currentMonth
-  );
-
-
-  const income =
+  const value =
     parseFloat(
       document
-        .getElementById("income")
+        .getElementById(
+          "incomeInput"
+        )
         .value
     ) || 0;
 
 
-  data[currentMonth].income =
-    income;
+  if (value < 0) {
+
+    alert(
+      "Bitte einen gültigen Betrag eingeben."
+    );
+
+    return;
+
+  }
+
+
+  data.months[
+    currentMonth
+  ].income =
+    value;
 
 
   saveData();
 
-  updateDisplay();
+  updateEverything();
 
 }
 
 
 function saveIncomeAllMonths() {
 
-  const income =
+  const value =
     parseFloat(
       document
-        .getElementById("income")
+        .getElementById(
+          "incomeInput"
+        )
         .value
     ) || 0;
 
 
-  if (income < 0) {
+  if (value < 0) {
 
     alert(
       "Bitte einen gültigen Betrag eingeben."
@@ -1002,36 +1551,29 @@ function saveIncomeAllMonths() {
     i++
   ) {
 
-    ensureMonth(i);
-
-    data[i].income =
-      income;
+    data.months[i].income =
+      value;
 
   }
 
 
   saveData();
 
-  updateDisplay();
+  updateEverything();
 
 
   alert(
-    "Die Einnahmen wurden auf alle 12 Monate übernommen."
+    "Die Einnahmen wurden für alle 12 Monate übernommen."
   );
 
 }
 
 
-/* =========================
+/* ==========================================
    MONATLICHE FIXKOSTEN
-========================= */
+========================================== */
 
-function addMonthlyFixedCurrentMonth() {
-
-  ensureMonth(
-    currentMonth
-  );
-
+function addMonthlyFixed() {
 
   const name =
     document
@@ -1067,9 +1609,7 @@ function addMonthlyFixedCurrentMonth() {
   }
 
 
-  data[
-    currentMonth
-  ].monthlyFixedItems.push({
+  data.monthlyFixedItems.push({
 
     id:
       Date.now() +
@@ -1082,208 +1622,6 @@ function addMonthlyFixedCurrentMonth() {
 
   });
 
-
-  clearMonthlyFixedInputs();
-
-  saveData();
-
-  updateDisplay();
-
-}
-
-
-function addMonthlyFixedAllMonths() {
-
-  const name =
-    document
-      .getElementById(
-        "monthlyFixedName"
-      )
-      .value
-      .trim();
-
-
-  const amount =
-    parseFloat(
-      document
-        .getElementById(
-          "monthlyFixedAmount"
-        )
-        .value
-    );
-
-
-  if (
-    !name ||
-    !amount ||
-    amount <= 0
-  ) {
-
-    alert(
-      "Bitte Bezeichnung und gültigen Betrag eingeben."
-    );
-
-    return;
-
-  }
-
-
-  const groupId =
-    Date.now();
-
-
-  for (
-    let i = 0;
-    i < 12;
-    i++
-  ) {
-
-    ensureMonth(i);
-
-
-    data[
-      i
-    ].monthlyFixedItems.push({
-
-      id:
-        groupId +
-        i +
-        Math.floor(
-          Math.random() * 1000
-        ),
-
-      groupId,
-
-      name,
-
-      amount
-
-    });
-
-  }
-
-
-  clearMonthlyFixedInputs();
-
-  saveData();
-
-  updateDisplay();
-
-
-  alert(
-    name +
-    " wurde auf alle 12 Monate übernommen."
-  );
-
-}
-
-
-function editMonthlyFixed(id) {
-
-  ensureMonth(
-    currentMonth
-  );
-
-
-  const item =
-    data[
-      currentMonth
-    ].monthlyFixedItems.find(
-      item =>
-        item.id === id
-    );
-
-
-  if (!item) {
-    return;
-  }
-
-
-  const newName =
-    prompt(
-      "Bezeichnung:",
-      item.name
-    );
-
-
-  if (newName === null) {
-    return;
-  }
-
-
-  const newAmount =
-    prompt(
-      "Betrag CHF:",
-      item.amount
-    );
-
-
-  if (newAmount === null) {
-    return;
-  }
-
-
-  const amount =
-    parseFloat(
-      newAmount
-    );
-
-
-  if (
-    !newName.trim() ||
-    !amount ||
-    amount <= 0
-  ) {
-
-    alert(
-      "Ungültige Eingabe."
-    );
-
-    return;
-
-  }
-
-
-  /*
-  Nur der aktuell ausgewählte Monat
-  wird geändert.
-  */
-
-  item.name =
-    newName.trim();
-
-  item.amount =
-    amount;
-
-
-  saveData();
-
-  updateDisplay();
-
-}
-
-
-function deleteMonthlyFixed(id) {
-
-  data[
-    currentMonth
-  ].monthlyFixedItems =
-    data[
-      currentMonth
-    ].monthlyFixedItems.filter(
-      item =>
-        item.id !== id
-    );
-
-
-  saveData();
-
-  updateDisplay();
-
-}
-
-
-function clearMonthlyFixedInputs() {
 
   document.getElementById(
     "monthlyFixedName"
@@ -1294,177 +1632,18 @@ function clearMonthlyFixedInputs() {
     "monthlyFixedAmount"
   ).value = "";
 
-}
-
-
-/* =========================
-   JÄHRLICHE FIXKOSTEN
-========================= */
-
-function addYearlyFixedCurrentMonth() {
-
-  ensureMonth(
-    currentMonth
-  );
-
-
-  const name =
-    document
-      .getElementById(
-        "yearlyFixedName"
-      )
-      .value
-      .trim();
-
-
-  const amount =
-    parseFloat(
-      document
-        .getElementById(
-          "yearlyFixedAmount"
-        )
-        .value
-    );
-
-
-  if (
-    !name ||
-    !amount ||
-    amount <= 0
-  ) {
-
-    alert(
-      "Bitte Bezeichnung und gültigen Betrag eingeben."
-    );
-
-    return;
-
-  }
-
-
-  data[
-    currentMonth
-  ].yearlyFixedItems.push({
-
-    id:
-      Date.now() +
-      Math.floor(
-        Math.random() * 10000
-      ),
-
-    name,
-
-    amount
-
-  });
-
-
-  clearYearlyFixedInputs();
 
   saveData();
 
-  updateDisplay();
+  updateEverything();
 
 }
 
 
-function addYearlyFixedAllMonths() {
-
-  const name =
-    document
-      .getElementById(
-        "yearlyFixedName"
-      )
-      .value
-      .trim();
-
-
-  const amount =
-    parseFloat(
-      document
-        .getElementById(
-          "yearlyFixedAmount"
-        )
-        .value
-    );
-
-
-  if (
-    !name ||
-    !amount ||
-    amount <= 0
-  ) {
-
-    alert(
-      "Bitte Bezeichnung und gültigen Betrag eingeben."
-    );
-
-    return;
-
-  }
-
-
-  const groupId =
-    Date.now();
-
-
-  for (
-    let i = 0;
-    i < 12;
-    i++
-  ) {
-
-    ensureMonth(i);
-
-
-    data[
-      i
-    ].yearlyFixedItems.push({
-
-      id:
-        groupId +
-        i +
-        Math.floor(
-          Math.random() * 1000
-        ),
-
-      groupId,
-
-      name,
-
-      amount
-
-    });
-
-  }
-
-
-  clearYearlyFixedInputs();
-
-  saveData();
-
-  updateDisplay();
-
-
-  alert(
-    name +
-    " wurde auf alle 12 Monate übernommen."
-  );
-
-}
-
-
-function editYearlyFixed(id) {
-
-  ensureMonth(
-    currentMonth
-  );
-
+function editMonthlyFixed(id) {
 
   const item =
-    data[
-      currentMonth
-    ].yearlyFixedItems.find(
+    data.monthlyFixedItems.find(
       item =>
         item.id === id
     );
@@ -1475,38 +1654,40 @@ function editYearlyFixed(id) {
   }
 
 
-  const newName =
+  const name =
     prompt(
       "Bezeichnung:",
       item.name
     );
 
 
-  if (newName === null) {
+  if (name === null) {
     return;
   }
 
 
-  const newAmount =
+  const amountInput =
     prompt(
-      "Jahresbetrag CHF:",
+      "Betrag pro Monat CHF:",
       item.amount
     );
 
 
-  if (newAmount === null) {
+  if (
+    amountInput === null
+  ) {
     return;
   }
 
 
   const amount =
     parseFloat(
-      newAmount
+      amountInput
     );
 
 
   if (
-    !newName.trim() ||
+    !name.trim() ||
     !amount ||
     amount <= 0
   ) {
@@ -1520,13 +1701,8 @@ function editYearlyFixed(id) {
   }
 
 
-  /*
-  Änderung gilt nur
-  im aktuell ausgewählten Monat.
-  */
-
   item.name =
-    newName.trim();
+    name.trim();
 
   item.amount =
     amount;
@@ -1534,19 +1710,15 @@ function editYearlyFixed(id) {
 
   saveData();
 
-  updateDisplay();
+  updateEverything();
 
 }
 
 
-function deleteYearlyFixed(id) {
+function deleteMonthlyFixed(id) {
 
-  data[
-    currentMonth
-  ].yearlyFixedItems =
-    data[
-      currentMonth
-    ].yearlyFixedItems.filter(
+  data.monthlyFixedItems =
+    data.monthlyFixedItems.filter(
       item =>
         item.id !== id
     );
@@ -1554,12 +1726,64 @@ function deleteYearlyFixed(id) {
 
   saveData();
 
-  updateDisplay();
+  updateEverything();
 
 }
 
 
-function clearYearlyFixedInputs() {
+/* ==========================================
+   JÄHRLICHE FIXKOSTEN
+========================================== */
+
+function addYearlyFixed() {
+
+  const name =
+    document
+      .getElementById(
+        "yearlyFixedName"
+      )
+      .value
+      .trim();
+
+
+  const amount =
+    parseFloat(
+      document
+        .getElementById(
+          "yearlyFixedAmount"
+        )
+        .value
+    );
+
+
+  if (
+    !name ||
+    !amount ||
+    amount <= 0
+  ) {
+
+    alert(
+      "Bitte Bezeichnung und gültigen Betrag eingeben."
+    );
+
+    return;
+
+  }
+
+
+  data.yearlyFixedItems.push({
+
+    id:
+      Date.now() +
+      Math.floor(
+        Math.random() * 10000
+      ),
+
+    name,
+    amount
+
+  });
+
 
   document.getElementById(
     "yearlyFixedName"
@@ -1570,19 +1794,110 @@ function clearYearlyFixedInputs() {
     "yearlyFixedAmount"
   ).value = "";
 
+
+  saveData();
+
+  updateEverything();
+
 }
 
 
-/* =========================
+function editYearlyFixed(id) {
+
+  const item =
+    data.yearlyFixedItems.find(
+      item =>
+        item.id === id
+    );
+
+
+  if (!item) {
+    return;
+  }
+
+
+  const name =
+    prompt(
+      "Bezeichnung:",
+      item.name
+    );
+
+
+  if (name === null) {
+    return;
+  }
+
+
+  const amountInput =
+    prompt(
+      "Jahresbetrag CHF:",
+      item.amount
+    );
+
+
+  if (
+    amountInput === null
+  ) {
+    return;
+  }
+
+
+  const amount =
+    parseFloat(
+      amountInput
+    );
+
+
+  if (
+    !name.trim() ||
+    !amount ||
+    amount <= 0
+  ) {
+
+    alert(
+      "Ungültige Eingabe."
+    );
+
+    return;
+
+  }
+
+
+  item.name =
+    name.trim();
+
+  item.amount =
+    amount;
+
+
+  saveData();
+
+  updateEverything();
+
+}
+
+
+function deleteYearlyFixed(id) {
+
+  data.yearlyFixedItems =
+    data.yearlyFixedItems.filter(
+      item =>
+        item.id !== id
+    );
+
+
+  saveData();
+
+  updateEverything();
+
+}
+
+
+/* ==========================================
    AUSGABEN
-========================= */
+========================================== */
 
 function addExpense() {
-
-  ensureMonth(
-    currentMonth
-  );
-
 
   const name =
     document
@@ -1626,7 +1941,7 @@ function addExpense() {
   }
 
 
-  data[
+  data.months[
     currentMonth
   ].expenses.push({
 
@@ -1637,9 +1952,7 @@ function addExpense() {
       ),
 
     name,
-
     category,
-
     amount
 
   });
@@ -1657,7 +1970,7 @@ function addExpense() {
 
   saveData();
 
-  updateDisplay();
+  updateEverything();
 
 }
 
@@ -1665,7 +1978,7 @@ function addExpense() {
 function editExpense(id) {
 
   const expense =
-    data[
+    data.months[
       currentMonth
     ].expenses.find(
       expense =>
@@ -1678,38 +1991,40 @@ function editExpense(id) {
   }
 
 
-  const newName =
+  const name =
     prompt(
       "Beschreibung:",
       expense.name
     );
 
 
-  if (newName === null) {
+  if (name === null) {
     return;
   }
 
 
-  const newAmount =
+  const amountInput =
     prompt(
       "Betrag CHF:",
       expense.amount
     );
 
 
-  if (newAmount === null) {
+  if (
+    amountInput === null
+  ) {
     return;
   }
 
 
   const amount =
     parseFloat(
-      newAmount
+      amountInput
     );
 
 
   if (
-    !newName.trim() ||
+    !name.trim() ||
     !amount ||
     amount <= 0
   ) {
@@ -1724,7 +2039,7 @@ function editExpense(id) {
 
 
   expense.name =
-    newName.trim();
+    name.trim();
 
   expense.amount =
     amount;
@@ -1732,17 +2047,17 @@ function editExpense(id) {
 
   saveData();
 
-  updateDisplay();
+  updateEverything();
 
 }
 
 
 function deleteExpense(id) {
 
-  data[
+  data.months[
     currentMonth
   ].expenses =
-    data[
+    data.months[
       currentMonth
     ].expenses.filter(
       expense =>
@@ -1752,125 +2067,69 @@ function deleteExpense(id) {
 
   saveData();
 
-  updateDisplay();
+  updateEverything();
 
 }
 
 
-/* =========================
-   SUMMEN
-========================= */
+/* ==========================================
+   BERECHNUNGEN
+========================================== */
 
-function getMonthlyFixedTotal(month) {
+function getMonthlyFixedTotal() {
+
+  return data
+    .monthlyFixedItems
+    .reduce(
+
+      (sum, item) =>
+        sum +
+        Number(
+          item.amount || 0
+        ),
+
+      0
+
+    );
+
+}
+
+
+function getYearlyFixedTotal() {
+
+  return data
+    .yearlyFixedItems
+    .reduce(
+
+      (sum, item) =>
+        sum +
+        Number(
+          item.amount || 0
+        ),
+
+      0
+
+    );
+
+}
+
+
+function getYearlyFixedMonthly() {
 
   return (
-    month.monthlyFixedItems || []
-  ).reduce(
-
-    (sum, item) =>
-      sum +
-      Number(
-        item.amount || 0
-      ),
-
-    0
-
+    getYearlyFixedTotal() /
+    12
   );
 
 }
 
 
-function getYearlyFixedTotal(month) {
+function getExpenseTotal(monthIndex) {
 
-  return (
-    month.yearlyFixedItems || []
-  ).reduce(
-
-    (sum, item) =>
-      sum +
-      Number(
-        item.amount || 0
-      ),
-
-    0
-
-  );
-
-}
-
-
-/* =========================
-   MONAT LADEN
-========================= */
-
-function loadMonth() {
-
-  ensureMonth(
-    currentMonth
-  );
-
-
-  const month =
-    data[currentMonth];
-
-
-  document.getElementById(
-    "income"
-  ).value =
-    month.income || "";
-
-
-  document.getElementById(
-    "headerMonth"
-  ).textContent =
-    months[currentMonth] +
-    " · Deine Finanzen im Überblick";
-
-
-  updateDisplay();
-
-}
-
-
-/* =========================
-   HAUPTANZEIGE
-========================= */
-
-function updateDisplay() {
-
-  ensureMonth(
-    currentMonth
-  );
-
-
-  const month =
-    data[currentMonth];
-
-
-  const income =
-    Number(
-      month.income || 0
-    );
-
-
-  const monthlyFixed =
-    getMonthlyFixedTotal(
-      month
-    );
-
-
-  const yearlyFixed =
-    getYearlyFixedTotal(
-      month
-    );
-
-
-  const yearlyFixedMonthly =
-    yearlyFixed / 12;
-
-
-  const variableExpenses =
-    month.expenses.reduce(
+  return data
+    .months[monthIndex]
+    .expenses
+    .reduce(
 
       (sum, expense) =>
         sum +
@@ -1882,222 +2141,233 @@ function updateDisplay() {
 
     );
 
+}
+
+
+function getMonthNumbers(monthIndex) {
+
+  const income =
+    Number(
+      data.months[
+        monthIndex
+      ].income || 0
+    );
+
+
+  const monthlyFixed =
+    getMonthlyFixedTotal();
+
+
+  const yearlyFixedMonthly =
+    getYearlyFixedMonthly();
+
+
+  const expenses =
+    getExpenseTotal(
+      monthIndex
+    );
+
 
   const fixedTotal =
     monthlyFixed +
     yearlyFixedMonthly;
 
 
-  const totalExpenses =
+  const totalCosts =
     fixedTotal +
-    variableExpenses;
+    expenses;
 
 
   const balance =
     income -
-    totalExpenses;
+    totalCosts;
 
 
-  document.getElementById(
-    "incomeDisplay"
-  ).textContent =
-    formatCHF(
-      income
+  const percentage =
+    income > 0
+      ? (
+          totalCosts /
+          income
+        ) * 100
+      : 0;
+
+
+  return {
+    income,
+    monthlyFixed,
+    yearlyFixedMonthly,
+    fixedTotal,
+    expenses,
+    totalCosts,
+    balance,
+    percentage
+  };
+
+}
+
+
+/* ==========================================
+   COCKPIT
+========================================== */
+
+function renderCockpit() {
+
+  const values =
+    getMonthNumbers(
+      currentMonth
     );
 
 
   document.getElementById(
-    "fixedDisplay"
+    "cockpitIncome"
   ).textContent =
     formatCHF(
-      fixedTotal
+      values.income
     );
 
 
   document.getElementById(
-    "variableDisplay"
+    "cockpitFixed"
   ).textContent =
     formatCHF(
-      variableExpenses
+      values.fixedTotal
     );
 
 
-  const balanceElement =
+  document.getElementById(
+    "cockpitExpenses"
+  ).textContent =
+    formatCHF(
+      values.expenses
+    );
+
+
+  const cockpitBalance =
     document.getElementById(
-      "balanceDisplay"
+      "cockpitBalance"
     );
 
 
-  balanceElement.textContent =
+  cockpitBalance.textContent =
     formatCHF(
-      balance
+      values.balance
     );
 
 
-  balanceElement.className =
-    "card-value " +
+  cockpitBalance.className =
+    "overview-value " +
     (
-      balance >= 0
+      values.balance >= 0
         ? "positive"
         : "negative"
     );
 
 
-  const percentage =
-    income > 0
-
-      ? (
-          totalExpenses /
-          income
-        ) * 100
-
-      : 0;
-
-
   document.getElementById(
-    "percentageDisplay"
-  ).textContent =
-    percentage.toFixed(1) +
-    " %";
-
-
-  document.getElementById(
-    "progressBar"
-  ).style.width =
-    Math.min(
-      percentage,
-      100
-    ) + "%";
-
-
-  document.getElementById(
-    "monthlyFixedTotal"
+    "cockpitAnalysisIncome"
   ).textContent =
     formatCHF(
-      monthlyFixed
+      values.income
     );
 
 
   document.getElementById(
-    "yearlyFixedTotal"
+    "cockpitAnalysisMonthlyFixed"
   ).textContent =
     formatCHF(
-      yearlyFixed
+      values.monthlyFixed
     );
 
 
   document.getElementById(
-    "yearlyFixedMonthly"
+    "cockpitAnalysisYearlyFixed"
   ).textContent =
     formatCHF(
-      yearlyFixedMonthly
+      values.yearlyFixedMonthly
     );
 
 
   document.getElementById(
-    "analysisIncome"
+    "cockpitAnalysisExpenses"
   ).textContent =
     formatCHF(
-      income
-    );
-
-
-  document.getElementById(
-    "analysisMonthlyFixed"
-  ).textContent =
-    formatCHF(
-      monthlyFixed
-    );
-
-
-  document.getElementById(
-    "analysisYearlyFixed"
-  ).textContent =
-    formatCHF(
-      yearlyFixedMonthly
-    );
-
-
-  document.getElementById(
-    "analysisVariable"
-  ).textContent =
-    formatCHF(
-      variableExpenses
-    );
-
-
-  document.getElementById(
-    "analysisTotal"
-  ).textContent =
-    formatCHF(
-      totalExpenses
+      values.expenses
     );
 
 
   const analysisBalance =
     document.getElementById(
-      "analysisBalance"
+      "cockpitAnalysisBalance"
     );
 
 
   analysisBalance.textContent =
     formatCHF(
-      balance
+      values.balance
     );
 
 
   analysisBalance.className =
-    balance >= 0
+    values.balance >= 0
       ? "positive"
       : "negative";
 
 
-  renderMonthlyFixed();
+  document.getElementById(
+    "cockpitPercentage"
+  ).textContent =
+    values.percentage
+      .toFixed(1) +
+    " %";
 
-  renderYearlyFixed();
 
-  renderExpenses();
-
-  updateYearOverview();
+  document.getElementById(
+    "cockpitProgressBar"
+  ).style.width =
+    Math.min(
+      values.percentage,
+      100
+    ) + "%";
 
 }
 
 
-/* =========================
-   MONATLICHE FIXKOSTEN LISTE
-========================= */
+/* ==========================================
+   EINNAHMEN ANZEIGE
+========================================== */
 
-function renderMonthlyFixed() {
+function renderIncomePage() {
+
+  const monthData =
+    data.months[
+      currentMonth
+    ];
+
+
+  document.getElementById(
+    "incomeSelectedMonth"
+  ).textContent =
+    months[currentMonth];
+
+
+  document.getElementById(
+    "incomeInput"
+  ).value =
+    monthData.income ||
+    "";
+
 
   const list =
     document.getElementById(
-      "monthlyFixedList"
+      "incomeYearList"
     );
 
 
   list.innerHTML = "";
 
 
-  const items =
-    data[
-      currentMonth
-    ].monthlyFixedItems;
-
-
-  if (
-    items.length === 0
-  ) {
-
-    list.innerHTML =
-      "<div style='color:#94a3b8;margin-top:15px;'>Noch keine monatlichen Fixkosten erfasst.</div>";
-
-    return;
-
-  }
-
-
-  items.forEach(
-    item => {
+  months.forEach(
+    (month, index) => {
 
       const row =
         document.createElement(
@@ -2106,45 +2376,37 @@ function renderMonthlyFixed() {
 
 
       row.className =
-        "expense-item";
+        "list-item";
 
 
       row.innerHTML = `
 
-        <div class="expense-info">
-
+        <div class="list-info">
           <strong>
-            ${escapeHtml(item.name)}
+            ${month}
           </strong>
-
-          <small>
-            pro Monat
-          </small>
-
         </div>
 
-
-        <div class="item-actions">
-
-          <span class="expense-value">
-            ${formatCHF(item.amount)}
-          </span>
-
-          <button
-            class="edit-btn"
-            onclick="editMonthlyFixed(${item.id})">
-            Ändern
-          </button>
-
-          <button
-            class="delete-btn"
-            onclick="deleteMonthlyFixed(${item.id})">
-            Löschen
-          </button>
-
+        <div
+          class="item-value positive">
+          ${formatCHF(
+            data.months[
+              index
+            ].income
+          )}
         </div>
 
       `;
+
+
+      row.onclick = () => {
+
+        currentMonth =
+          index;
+
+        updateEverything();
+
+      };
 
 
       list.appendChild(
@@ -2157,43 +2419,113 @@ function renderMonthlyFixed() {
 }
 
 
-/* =========================
-   JÄHRLICHE FIXKOSTEN LISTE
-========================= */
+/* ==========================================
+   FIXKOSTEN ANZEIGE
+========================================== */
 
-function renderYearlyFixed() {
+function renderFixedPage() {
 
-  const list =
+  const monthlyList =
+    document.getElementById(
+      "monthlyFixedList"
+    );
+
+
+  monthlyList.innerHTML = "";
+
+
+  if (
+    data.monthlyFixedItems.length === 0
+  ) {
+
+    monthlyList.innerHTML =
+      "<div class='hint'>Noch keine monatlichen Fixkosten erfasst.</div>";
+
+  }
+
+
+  data.monthlyFixedItems.forEach(
+    item => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "list-item";
+
+
+      row.innerHTML = `
+
+        <div class="list-info">
+
+          <strong>
+            ${escapeHtml(item.name)}
+          </strong>
+
+          <small>
+            gilt jeden Monat
+          </small>
+
+        </div>
+
+
+        <div class="item-actions">
+
+          <span class="item-value">
+            ${formatCHF(item.amount)}
+          </span>
+
+          <button
+            class="small-btn edit-btn"
+            onclick="editMonthlyFixed(${item.id})">
+            Ändern
+          </button>
+
+          <button
+            class="small-btn delete-btn"
+            onclick="deleteMonthlyFixed(${item.id})">
+            Löschen
+          </button>
+
+        </div>
+
+      `;
+
+
+      monthlyList.appendChild(
+        row
+      );
+
+    }
+  );
+
+
+  const yearlyList =
     document.getElementById(
       "yearlyFixedList"
     );
 
 
-  list.innerHTML = "";
-
-
-  const items =
-    data[
-      currentMonth
-    ].yearlyFixedItems;
+  yearlyList.innerHTML = "";
 
 
   if (
-    items.length === 0
+    data.yearlyFixedItems.length === 0
   ) {
 
-    list.innerHTML =
-      "<div style='color:#94a3b8;margin-top:15px;'>Noch keine jährlichen Fixkosten erfasst.</div>";
-
-    return;
+    yearlyList.innerHTML =
+      "<div class='hint'>Noch keine jährlichen Fixkosten erfasst.</div>";
 
   }
 
 
-  items.forEach(
+  data.yearlyFixedItems.forEach(
     item => {
 
-      const monthlyShare =
+      const monthly =
         Number(
           item.amount || 0
         ) / 12;
@@ -2206,19 +2538,19 @@ function renderYearlyFixed() {
 
 
       row.className =
-        "expense-item";
+        "list-item";
 
 
       row.innerHTML = `
 
-        <div class="expense-info">
+        <div class="list-info">
 
           <strong>
             ${escapeHtml(item.name)}
           </strong>
 
           <small>
-            ${formatCHF(monthlyShare)}
+            ${formatCHF(monthly)}
             pro Monat
           </small>
 
@@ -2227,18 +2559,18 @@ function renderYearlyFixed() {
 
         <div class="item-actions">
 
-          <span class="expense-value">
+          <span class="item-value">
             ${formatCHF(item.amount)}
           </span>
 
           <button
-            class="edit-btn"
+            class="small-btn edit-btn"
             onclick="editYearlyFixed(${item.id})">
             Ändern
           </button>
 
           <button
-            class="delete-btn"
+            class="small-btn delete-btn"
             onclick="deleteYearlyFixed(${item.id})">
             Löschen
           </button>
@@ -2248,21 +2580,146 @@ function renderYearlyFixed() {
       `;
 
 
-      list.appendChild(
+      yearlyList.appendChild(
         row
       );
 
     }
   );
 
+
+  const monthlyTotal =
+    getMonthlyFixedTotal();
+
+
+  const yearlyTotal =
+    getYearlyFixedTotal();
+
+
+  const yearlyMonthly =
+    getYearlyFixedMonthly();
+
+
+  document.getElementById(
+    "monthlyFixedTotal"
+  ).textContent =
+    formatCHF(
+      monthlyTotal
+    );
+
+
+  document.getElementById(
+    "yearlyFixedTotal"
+  ).textContent =
+    formatCHF(
+      yearlyTotal
+    );
+
+
+  document.getElementById(
+    "yearlyFixedMonthlyTotal"
+  ).textContent =
+    formatCHF(
+      yearlyMonthly
+    );
+
+
+  document.getElementById(
+    "fixedSummaryMonthly"
+  ).textContent =
+    formatCHF(
+      monthlyTotal
+    );
+
+
+  document.getElementById(
+    "fixedSummaryYearlyMonthly"
+  ).textContent =
+    formatCHF(
+      yearlyMonthly
+    );
+
+
+  document.getElementById(
+    "fixedSummaryTotal"
+  ).textContent =
+    formatCHF(
+      monthlyTotal +
+      yearlyMonthly
+    );
+
 }
 
 
-/* =========================
-   AUSGABEN LISTE
-========================= */
+/* ==========================================
+   AUSGABEN ANZEIGE
+========================================== */
 
-function renderExpenses() {
+function renderExpensesPage() {
+
+  const month =
+    data.months[
+      currentMonth
+    ];
+
+
+  const values =
+    getMonthNumbers(
+      currentMonth
+    );
+
+
+  document.getElementById(
+    "expenseMonthTitle"
+  ).textContent =
+    "· " +
+    months[currentMonth];
+
+
+  document.getElementById(
+    "expenseAnalysisIncome"
+  ).textContent =
+    formatCHF(
+      values.income
+    );
+
+
+  document.getElementById(
+    "expenseAnalysisFixed"
+  ).textContent =
+    formatCHF(
+      values.fixedTotal
+    );
+
+
+  document.getElementById(
+    "expenseAnalysisExpenses"
+  ).textContent =
+    formatCHF(
+      values.expenses
+    );
+
+
+  const balance =
+    document.getElementById(
+      "expenseAnalysisBalance"
+    );
+
+
+  balance.textContent =
+    formatCHF(
+      values.balance
+    );
+
+
+  balance.className =
+    "overview-value " +
+    (
+      values.balance >= 0
+        ? "positive"
+        : "negative"
+    );
+
 
   const list =
     document.getElementById(
@@ -2273,25 +2730,17 @@ function renderExpenses() {
   list.innerHTML = "";
 
 
-  const expenses =
-    data[
-      currentMonth
-    ].expenses;
-
-
   if (
-    expenses.length === 0
+    month.expenses.length === 0
   ) {
 
     list.innerHTML =
-      "<div style='color:#94a3b8;'>Noch keine Ausgaben erfasst.</div>";
-
-    return;
+      "<div class='hint'>In diesem Monat wurden noch keine Ausgaben erfasst.</div>";
 
   }
 
 
-  expenses.forEach(
+  month.expenses.forEach(
     expense => {
 
       const row =
@@ -2301,12 +2750,12 @@ function renderExpenses() {
 
 
       row.className =
-        "expense-item";
+        "list-item";
 
 
       row.innerHTML = `
 
-        <div class="expense-info">
+        <div class="list-info">
 
           <strong>
             ${escapeHtml(expense.name)}
@@ -2321,18 +2770,18 @@ function renderExpenses() {
 
         <div class="item-actions">
 
-          <span class="expense-value">
+          <span class="item-value">
             ${formatCHF(expense.amount)}
           </span>
 
           <button
-            class="edit-btn"
+            class="small-btn edit-btn"
             onclick="editExpense(${expense.id})">
             Ändern
           </button>
 
           <button
-            class="delete-btn"
+            class="small-btn delete-btn"
             onclick="deleteExpense(${expense.id})">
             Löschen
           </button>
@@ -2349,23 +2798,141 @@ function renderExpenses() {
     }
   );
 
+
+  document.getElementById(
+    "expenseTotal"
+  ).textContent =
+    formatCHF(
+      values.expenses
+    );
+
+
+  renderCategoryAnalysis();
+
 }
 
 
-/* =========================
+/* ==========================================
+   KATEGORIEAUSWERTUNG
+========================================== */
+
+function renderCategoryAnalysis() {
+
+  const expenses =
+    data.months[
+      currentMonth
+    ].expenses;
+
+
+  const categories =
+    {};
+
+
+  expenses.forEach(
+    expense => {
+
+      if (!categories[
+        expense.category
+      ]) {
+
+        categories[
+          expense.category
+        ] = 0;
+
+      }
+
+
+      categories[
+        expense.category
+      ] +=
+        Number(
+          expense.amount || 0
+        );
+
+    }
+  );
+
+
+  const container =
+    document.getElementById(
+      "categoryAnalysis"
+    );
+
+
+  container.innerHTML = "";
+
+
+  const entries =
+    Object.entries(
+      categories
+    )
+    .sort(
+      (a, b) =>
+        b[1] - a[1]
+    );
+
+
+  if (
+    entries.length === 0
+  ) {
+
+    container.innerHTML =
+      "<div class='hint'>Noch keine Kategorien auszuwerten.</div>";
+
+    return;
+
+  }
+
+
+  entries.forEach(
+    ([category, amount]) => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "summary-row";
+
+
+      row.innerHTML = `
+
+        <span>
+          ${escapeHtml(category)}
+        </span>
+
+        <strong>
+          ${formatCHF(amount)}
+        </strong>
+
+      `;
+
+
+      container.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
+
+
+/* ==========================================
    JAHRESÜBERSICHT
-========================= */
+========================================== */
 
-function updateYearOverview() {
+function renderYearOverview() {
 
-  const tableBody =
+  const body =
     document.getElementById(
       "yearTableBody"
     );
 
 
-  tableBody.innerHTML =
-    "";
+  body.innerHTML = "";
 
 
   let totalIncome =
@@ -2374,10 +2941,10 @@ function updateYearOverview() {
   let totalMonthlyFixed =
     0;
 
-  let totalYearlyFixedMonthly =
+  let totalYearlyFixed =
     0;
 
-  let totalVariableExpenses =
+  let totalExpenses =
     0;
 
   let totalBalance =
@@ -2390,70 +2957,28 @@ function updateYearOverview() {
     i++
   ) {
 
-    ensureMonth(i);
-
-
-    const month =
-      data[i];
-
-
-    const income =
-      Number(
-        month.income || 0
-      );
-
-
-    const monthlyFixed =
-      getMonthlyFixedTotal(
-        month
-      );
-
-
-    const yearlyFixedMonthly =
-      getYearlyFixedTotal(
-        month
-      ) / 12;
-
-
-    const variableExpenses =
-      month.expenses.reduce(
-
-        (sum, expense) =>
-          sum +
-          Number(
-            expense.amount || 0
-          ),
-
-        0
-
-      );
-
-
-    const balance =
-      income -
-      monthlyFixed -
-      yearlyFixedMonthly -
-      variableExpenses;
+    const values =
+      getMonthNumbers(i);
 
 
     totalIncome +=
-      income;
+      values.income;
 
 
     totalMonthlyFixed +=
-      monthlyFixed;
+      values.monthlyFixed;
 
 
-    totalYearlyFixedMonthly +=
-      yearlyFixedMonthly;
+    totalYearlyFixed +=
+      values.yearlyFixedMonthly;
 
 
-    totalVariableExpenses +=
-      variableExpenses;
+    totalExpenses +=
+      values.expenses;
 
 
     totalBalance +=
-      balance;
+      values.balance;
 
 
     const row =
@@ -2468,42 +2993,32 @@ function updateYearOverview() {
         ${months[i]}
       </td>
 
-
-      <td class="positive-value">
-        ${formatCHF(income)}
+      <td class="positive">
+        ${formatCHF(values.income)}
       </td>
-
 
       <td>
-        ${formatCHF(monthlyFixed)}
+        ${formatCHF(values.monthlyFixed)}
       </td>
-
 
       <td>
-        ${formatCHF(yearlyFixedMonthly)}
+        ${formatCHF(values.yearlyFixedMonthly)}
       </td>
-
 
       <td>
-        ${formatCHF(variableExpenses)}
+        ${formatCHF(values.expenses)}
       </td>
-
 
       <td class="${
-        balance >= 0
-          ? "positive-value"
-          : "negative-value"
+        values.balance >= 0
+          ? "positive"
+          : "negative"
       }">
-        ${formatCHF(balance)}
+        ${formatCHF(values.balance)}
       </td>
 
     `;
 
-
-    /*
-    Klick auf Monatszeile
-    öffnet direkt den Monat.
-    */
 
     row.style.cursor =
       "pointer";
@@ -2514,19 +3029,12 @@ function updateYearOverview() {
       currentMonth =
         i;
 
-      renderMonths();
-
-      loadMonth();
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+      updateEverything();
 
     };
 
 
-    tableBody.appendChild(
+    body.appendChild(
       row
     );
 
@@ -2534,7 +3042,7 @@ function updateYearOverview() {
 
 
   document.getElementById(
-    "totalYearIncome"
+    "yearIncomeTotal"
   ).textContent =
     formatCHF(
       totalIncome
@@ -2542,7 +3050,7 @@ function updateYearOverview() {
 
 
   document.getElementById(
-    "totalMonthlyFixed"
+    "yearMonthlyFixedTotal"
   ).textContent =
     formatCHF(
       totalMonthlyFixed
@@ -2550,44 +3058,113 @@ function updateYearOverview() {
 
 
   document.getElementById(
-    "totalYearlyFixed"
+    "yearYearlyFixedTotal"
   ).textContent =
     formatCHF(
-      totalYearlyFixedMonthly
+      totalYearlyFixed
     );
 
 
   document.getElementById(
-    "totalVariableExpenses"
+    "yearExpenseTotal"
   ).textContent =
     formatCHF(
-      totalVariableExpenses
+      totalExpenses
     );
 
 
-  const totalBalanceElement =
+  const balance =
     document.getElementById(
-      "totalYearBalance"
+      "yearBalanceTotal"
     );
 
 
-  totalBalanceElement.textContent =
+  balance.textContent =
     formatCHF(
       totalBalance
     );
 
 
-  totalBalanceElement.className =
+  balance.className =
     totalBalance >= 0
-      ? "positive-value"
-      : "negative-value";
+      ? "positive"
+      : "negative";
 
 }
 
 
-/* =========================
+/* ==========================================
+   ALLES AKTUALISIEREN
+========================================== */
+
+function updateEverything() {
+
+  renderMonthGrids();
+
+  renderCockpit();
+
+  renderIncomePage();
+
+  renderFixedPage();
+
+  renderExpensesPage();
+
+  renderYearOverview();
+
+
+  const activePage =
+    document.querySelector(
+      ".page.active"
+    );
+
+
+  if (
+    activePage &&
+    activePage.id === "pageCockpit"
+  ) {
+
+    document.getElementById(
+      "headerSubtitle"
+    ).textContent =
+      "Cockpit · " +
+      months[currentMonth];
+
+  }
+
+
+  if (
+    activePage &&
+    activePage.id === "pageIncome"
+  ) {
+
+    document.getElementById(
+      "headerSubtitle"
+    ).textContent =
+      "Einnahmen · " +
+      months[currentMonth];
+
+  }
+
+
+  if (
+    activePage &&
+    activePage.id === "pageExpenses"
+  ) {
+
+    document.getElementById(
+      "headerSubtitle"
+    ).textContent =
+      "Ausgaben · " +
+      months[currentMonth];
+
+  }
+
+}
+
+
+/* ==========================================
    CHF FORMAT
-========================= */
+========================================== */
 
 function formatCHF(value) {
 
@@ -2608,9 +3185,9 @@ function formatCHF(value) {
 }
 
 
-/* =========================
-   SICHERE TEXTAUSGABE
-========================= */
+/* ==========================================
+   TEXT SICHERN
+========================================== */
 
 function escapeHtml(text) {
 
@@ -2631,40 +3208,15 @@ function escapeHtml(text) {
 }
 
 
-/* =========================
-   SPEICHERN
-========================= */
-
-function saveData() {
-
-  localStorage.setItem(
-    "budgetData",
-    JSON.stringify(data)
-  );
-
-}
-
-
-/* =========================
+/* ==========================================
    START
-========================= */
+========================================== */
 
-for (
-  let i = 0;
-  i < 12;
-  i++
-) {
-
-  ensureMonth(i);
-
-}
-
+initializeData();
 
 saveData();
 
-renderMonths();
-
-loadMonth();
+updateEverything();
 
 </script>
 
