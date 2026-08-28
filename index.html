@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <title>Budgetplaner</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding-bottom: 100px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 18px;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .card-title {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .card-value {
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .positive {
+      color: #16a34a;
+    }
+
+    .negative {
+      color: #dc2626;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 22px 0 12px;
+    }
+
+    select,
+    input,
+    button {
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      font-size: 16px;
+      background: white;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 5px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    button {
+      border: none;
+      background: #2563eb;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .expense-list {
+      margin-top: 15px;
+    }
+
+    .expense-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .expense-item:last-child {
+      border-bottom: none;
+    }
+
+    .expense-info strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .expense-info small {
+      color: #64748b;
+    }
+
+    .expense-value {
+      font-weight: 700;
+    }
+
+    .delete-btn {
+      width: auto;
+      padding: 7px 10px;
+      font-size: 12px;
+      background: #ef4444;
+      margin-left: 10px;
+    }
+
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .month-btn {
+      background: white;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .month-btn.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    .progress {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #2563eb;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    .footer-info {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 12px;
+      padding-top: 30px;
+    }
+
+    @media (min-width: 700px) {
+      .overview {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .month-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Budgetplaner</h1>
+  <p>Deine Finanzen einfach im Überblick</p>
+</header>
+
+<div class="container">
+
+  <div class="overview">
+
+    <div class="card">
+      <div class="card-title">Einnahmen</div>
+      <div class="card-value positive" id="incomeDisplay">
+        CHF 0.00
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Fixkosten</div>
+      <div class="card-value" id="fixedDisplay">
+        CHF 0.00
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Variable Kosten</div>
+      <div class="card-value" id="variableDisplay">
+        CHF 0.00
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Restbudget</div>
+      <div class="card-value" id="balanceDisplay">
+        CHF 0.00
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="section-title">
+    Monat auswählen
+  </div>
+
+  <div class="month-grid" id="monthGrid"></div>
+
+
+  <div class="section-title">
+    Monatliches Budget
+  </div>
+
+  <div class="card">
+
+    <div class="form-group">
+      <label>Monatliche Einnahmen</label>
+      <input
+        type="number"
+        id="income"
+        placeholder="z.B. 8300"
+        step="0.01"
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Monatliche Fixkosten</label>
+      <input
+        type="number"
+        id="monthlyFixed"
+        placeholder="z.B. 2500"
+        step="0.01"
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Jährliche Fixkosten gesamt</label>
+      <input
+        type="number"
+        id="yearlyFixed"
+        placeholder="z.B. 6000"
+        step="0.01"
+      >
+    </div>
+
+    <button onclick="saveBudget()">
+      Budget speichern
+    </button>
+
+  </div>
+
+
+  <div class="section-title">
+    Neue Ausgabe
+  </div>
+
+  <div class="card">
+
+    <div class="form-group">
+      <label>Beschreibung</label>
+      <input
+        type="text"
+        id="expenseName"
+        placeholder="z.B. Einkaufen"
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Kategorie</label>
+
+      <select id="expenseCategory">
+        <option>Lebensmittel</option>
+        <option>Restaurant</option>
+        <option>Auto</option>
+        <option>Freizeit</option>
+        <option>Shopping</option>
+        <option>Reisen</option>
+        <option>Gesundheit</option>
+        <option>Sonstiges</option>
+      </select>
+
+    </div>
+
+    <div class="form-group">
+      <label>Betrag CHF</label>
+      <input
+        type="number"
+        id="expenseAmount"
+        placeholder="0.00"
+        step="0.01"
+      >
+    </div>
+
+    <button onclick="addExpense()">
+      Ausgabe hinzufügen
+    </button>
+
+  </div>
+
+
+  <div class="section-title">
+    Monatsanalyse
+  </div>
+
+  <div class="card">
+
+    <div>
+      Ausgabenquote:
+      <strong id="percentageDisplay">0 %</strong>
+    </div>
+
+    <div class="progress">
+      <div
+        class="progress-bar"
+        id="progressBar">
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="section-title">
+    Ausgaben
+  </div>
+
+  <div class="card">
+
+    <div
+      class="expense-list"
+      id="expenseList">
+    </div>
+
+  </div>
+
+
+  <div class="section-title">
+    Jahresübersicht
+  </div>
+
+  <div class="card">
+
+    <div class="expense-item">
+      <div>Jahreseinnahmen</div>
+      <strong
+        class="positive"
+        id="yearIncome">
+        CHF 0.00
+      </strong>
+    </div>
+
+    <div class="expense-item">
+      <div>Jahresausgaben</div>
+      <strong
+        id="yearExpenses">
+        CHF 0.00
+      </strong>
+    </div>
+
+    <div class="expense-item">
+      <div>Jahresüberschuss</div>
+      <strong
+        id="yearBalance">
+        CHF 0.00
+      </strong>
+    </div>
+
+  </div>
+
+
+  <div class="footer-info">
+    Budgetplaner · Daten werden lokal auf deinem Gerät gespeichert
+  </div>
+
+</div>
+
+
+<script>
+
+const months = [
+  "Januar",
+  "Februar",
+  "März",
+  "April",
+  "Mai",
+  "Juni",
+  "Juli",
+  "August",
+  "September",
+  "Oktober",
+  "November",
+  "Dezember"
+];
+
+let currentMonth = new Date().getMonth();
+
+let data =
+  JSON.parse(
+    localStorage.getItem("budgetData")
+  ) || {};
+
+
+function ensureMonth(index) {
+
+  if (!data[index]) {
+
+    data[index] = {
+      income: 0,
+      monthlyFixed: 0,
+      yearlyFixed: 0,
+      expenses: []
+    };
+
+  }
+
+}
+
+
+function renderMonths() {
+
+  const grid =
+    document.getElementById("monthGrid");
+
+  grid.innerHTML = "";
+
+  months.forEach((month, index) => {
+
+    const button =
+      document.createElement("button");
+
+    button.textContent = month;
+
+    button.className =
+      "month-btn" +
+      (index === currentMonth
+        ? " active"
+        : "");
+
+    button.onclick = () => {
+
+      currentMonth = index;
+
+      loadMonth();
+      renderMonths();
+
+    };
+
+    grid.appendChild(button);
+
+  });
+
+}
+
+
+function saveBudget() {
+
+  ensureMonth(currentMonth);
+
+  data[currentMonth].income =
+    parseFloat(
+      document.getElementById("income").value
+    ) || 0;
+
+  data[currentMonth].monthlyFixed =
+    parseFloat(
+      document.getElementById("monthlyFixed").value
+    ) || 0;
+
+  data[currentMonth].yearlyFixed =
+    parseFloat(
+      document.getElementById("yearlyFixed").value
+    ) || 0;
+
+  saveData();
+
+  updateDisplay();
+
+}
+
+
+function addExpense() {
+
+  ensureMonth(currentMonth);
+
+  const name =
+    document
+      .getElementById("expenseName")
+      .value.trim();
+
+  const category =
+    document
+      .getElementById("expenseCategory")
+      .value;
+
+  const amount =
+    parseFloat(
+      document.getElementById("expenseAmount")
+      .value
+    );
+
+  if (!name || !amount || amount <= 0) {
+
+    alert(
+      "Bitte Beschreibung und gültigen Betrag eingeben."
+    );
+
+    return;
+
+  }
+
+  data[currentMonth].expenses.push({
+
+    id: Date.now(),
+    name,
+    category,
+    amount
+
+  });
+
+  document.getElementById("expenseName").value = "";
+  document.getElementById("expenseAmount").value = "";
+
+  saveData();
+
+  updateDisplay();
+
+}
+
+
+function deleteExpense(id) {
+
+  data[currentMonth].expenses =
+    data[currentMonth].expenses.filter(
+      expense => expense.id !== id
+    );
+
+  saveData();
+
+  updateDisplay();
+
+}
+
+
+function loadMonth() {
+
+  ensureMonth(currentMonth);
+
+  const month =
+    data[currentMonth];
+
+  document.getElementById("income").value =
+    month.income || "";
+
+  document.getElementById("monthlyFixed").value =
+    month.monthlyFixed || "";
+
+  document.getElementById("yearlyFixed").value =
+    month.yearlyFixed || "";
+
+  updateDisplay();
+
+}
+
+
+function updateDisplay() {
+
+  ensureMonth(currentMonth);
+
+  const month =
+    data[currentMonth];
+
+  const income =
+    month.income || 0;
+
+  const monthlyFixed =
+    month.monthlyFixed || 0;
+
+  const yearlyFixedMonthly =
+    (month.yearlyFixed || 0) / 12;
+
+  const variableExpenses =
+    month.expenses.reduce(
+      (sum, expense) =>
+        sum + expense.amount,
+      0
+    );
+
+  const fixedTotal =
+    monthlyFixed +
+    yearlyFixedMonthly;
+
+  const totalExpenses =
+    fixedTotal +
+    variableExpenses;
+
+  const balance =
+    income -
+    totalExpenses;
+
+
+  document.getElementById(
+    "incomeDisplay"
+  ).textContent =
+    formatCHF(income);
+
+
+  document.getElementById(
+    "fixedDisplay"
+  ).textContent =
+    formatCHF(fixedTotal);
+
+
+  document.getElementById(
+    "variableDisplay"
+  ).textContent =
+    formatCHF(variableExpenses);
+
+
+  const balanceElement =
+    document.getElementById(
+      "balanceDisplay"
+    );
+
+  balanceElement.textContent =
+    formatCHF(balance);
+
+  balanceElement.className =
+    "card-value " +
+    (balance >= 0
+      ? "positive"
+      : "negative");
+
+
+  const percentage =
+    income > 0
+      ? (totalExpenses / income) * 100
+      : 0;
+
+
+  document.getElementById(
+    "percentageDisplay"
+  ).textContent =
+    percentage.toFixed(1) + " %";
+
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    Math.min(percentage, 100) + "%";
+
+
+  renderExpenses();
+
+  updateYearOverview();
+
+}
+
+
+function renderExpenses() {
+
+  const list =
+    document.getElementById(
+      "expenseList"
+    );
+
+  list.innerHTML = "";
+
+  const expenses =
+    data[currentMonth].expenses;
+
+  if (expenses.length === 0) {
+
+    list.innerHTML =
+      "<div style='color:#94a3b8;'>Noch keine Ausgaben erfasst.</div>";
+
+    return;
+
+  }
+
+  expenses.forEach(expense => {
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "expense-item";
+
+    row.innerHTML = `
+      <div class="expense-info">
+        <strong>
+          ${expense.name}
+        </strong>
+
+        <small>
+          ${expense.category}
+        </small>
+      </div>
+
+      <div style="display:flex;align-items:center;">
+        <span class="expense-value">
+          ${formatCHF(expense.amount)}
+        </span>
+
+        <button
+          class="delete-btn"
+          onclick="deleteExpense(${expense.id})">
+          Löschen
+        </button>
+      </div>
+    `;
+
+    list.appendChild(row);
+
+  });
+
+}
+
+
+function updateYearOverview() {
+
+  let totalIncome = 0;
+  let totalExpenses = 0;
+
+  for (let i = 0; i < 12; i++) {
+
+    ensureMonth(i);
+
+    const month =
+      data[i];
+
+    totalIncome +=
+      month.income || 0;
+
+    totalExpenses +=
+      (month.monthlyFixed || 0);
+
+    totalExpenses +=
+      (month.yearlyFixed || 0) / 12;
+
+    totalExpenses +=
+      month.expenses.reduce(
+        (sum, expense) =>
+          sum + expense.amount,
+        0
+      );
+
+  }
+
+
+  const yearBalance =
+    totalIncome -
+    totalExpenses;
+
+
+  document.getElementById(
+    "yearIncome"
+  ).textContent =
+    formatCHF(totalIncome);
+
+
+  document.getElementById(
+    "yearExpenses"
+  ).textContent =
+    formatCHF(totalExpenses);
+
+
+  const balanceElement =
+    document.getElementById(
+      "yearBalance"
+    );
+
+  balanceElement.textContent =
+    formatCHF(yearBalance);
+
+  balanceElement.className =
+    yearBalance >= 0
+      ? "positive"
+      : "negative";
+
+}
+
+
+function formatCHF(value) {
+
+  return new Intl.NumberFormat(
+    "de-CH",
+    {
+      style: "currency",
+      currency: "CHF"
+    }
+  ).format(value);
+
+}
+
+
+function saveData() {
+
+  localStorage.setItem(
+    "budgetData",
+    JSON.stringify(data)
+  );
+
+}
+
+
+renderMonths();
+loadMonth();
+
+</script>
+
+</body>
+</html>
