@@ -2,804 +2,1812 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
   <meta name="theme-color" content="#0f172a">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Budgetplaner">
-  <meta name="description" content="Lokaler Budgetplaner mit Monats- und Jahresauswertung">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/icon-180.png">
-  <title>Mein Budget</title>
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
+  <meta name="apple-mobile-web-app-title" content="BudgetPlaner">
+
+  <title>BudgetPlaner</title>
+
   <style>
     :root {
-      --bg: #f1f5f9;
+      --background: #f1f5f9;
       --surface: #ffffff;
-      --surface-2: #f8fafc;
+      --surface-secondary: #f8fafc;
       --text: #0f172a;
       --muted: #64748b;
-      --line: #e2e8f0;
+      --border: #e2e8f0;
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
       --income: #16a34a;
       --monthly: #2563eb;
       --annual: #f59e0b;
       --expense: #dc2626;
-      --success: #15803d;
       --danger: #b91c1c;
-      --shadow: 0 12px 30px rgba(15, 23, 42, .08);
-      --radius: 20px;
       --nav-height: 78px;
+      --radius: 20px;
+      --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
     }
 
-    * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
       color: var(--text);
-      background: var(--bg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+      background: var(--background);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+      padding-bottom:
+        calc(var(--nav-height) + env(safe-area-inset-bottom));
     }
-    button, input, select, textarea { font: inherit; }
-    button { -webkit-tap-highlight-color: transparent; }
-    .hidden { display: none !important; }
-    .app { max-width: 980px; margin: 0 auto; }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
     .topbar {
       position: sticky;
       top: 0;
       z-index: 30;
-      color: #fff;
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      padding: calc(14px + env(safe-area-inset-top)) 16px 15px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, .18);
+      color: white;
+      background:
+        linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      padding:
+        calc(14px + env(safe-area-inset-top))
+        16px
+        15px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
     }
-    .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .brand { min-width: 0; }
-    .eyebrow { margin: 0 0 3px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .72; }
-    .brand h1 { margin: 0; font-size: 22px; line-height: 1.15; }
-    .icon-button {
-      width: 42px; height: 42px; flex: 0 0 42px;
-      display: grid; place-items: center;
-      border: 0; border-radius: 14px;
-      color: inherit; background: rgba(255,255,255,.13);
-      cursor: pointer;
+
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
-    .period-picker {
+
+    .eyebrow {
+      margin: 0 0 3px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.72;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .settings-button {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 14px;
+      color: white;
+      background: rgba(255, 255, 255, 0.13);
+      font-size: 22px;
+    }
+
+    .month-picker {
       display: grid;
       grid-template-columns: 42px 1fr 42px;
       gap: 8px;
-      align-items: center;
       margin-top: 14px;
     }
-    .period-picker button {
-      height: 42px; border: 0; border-radius: 13px;
-      color: #fff; background: rgba(255,255,255,.13); cursor: pointer;
-    }
-    .period-label {
-      height: 42px; display: grid; place-items: center;
-      border: 1px solid rgba(255,255,255,.16); border-radius: 13px;
-      background: rgba(255,255,255,.09); font-weight: 700; cursor: pointer;
+
+    .month-picker button {
+      height: 42px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: rgba(255, 255, 255, 0.13);
     }
 
-    main { padding: 18px 14px 36px; }
-    .view { display: none; animation: fade .18s ease; }
-    .view.active { display: block; }
-    @keyframes fade { from { opacity: .55; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .month-label {
+      font-weight: 800;
+    }
+
+    main {
+      padding: 18px 14px 36px;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+      animation: fade-in 0.2s ease;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0.5;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     .hero {
-      color: #fff;
-      border-radius: 24px;
-      background: linear-gradient(135deg, #2563eb 0%, #0f766e 110%);
-      box-shadow: var(--shadow);
       padding: 22px;
       margin-bottom: 14px;
+      color: white;
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, #2563eb 0%, #0f766e 110%);
+      box-shadow: var(--shadow);
     }
-    .hero.over { background: linear-gradient(135deg, #dc2626 0%, #7f1d1d 110%); }
-    .hero-label { margin: 0 0 7px; font-size: 14px; opacity: .82; }
-    .hero-value { margin: 0; font-size: clamp(32px, 8vw, 48px); line-height: 1; letter-spacing: -.04em; }
-    .hero-sub { margin: 10px 0 0; font-size: 13px; opacity: .82; }
 
-    .metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
-    .metric {
-      position: relative; overflow: hidden;
-      background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
-      padding: 15px; box-shadow: 0 5px 16px rgba(15,23,42,.04);
+    .hero.negative {
+      background:
+        linear-gradient(135deg, #dc2626 0%, #7f1d1d 110%);
     }
-    .metric::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: var(--accent); }
-    .metric span { display: block; color: var(--muted); font-size: 12px; line-height: 1.3; margin-bottom: 7px; }
-    .metric strong { display: block; font-size: clamp(17px, 4vw, 23px); }
-    .metric.income { --accent: var(--income); }
-    .metric.monthly { --accent: var(--monthly); }
-    .metric.annual { --accent: var(--annual); }
-    .metric.expense { --accent: var(--expense); }
+
+    .hero-label {
+      margin: 0 0 7px;
+      font-size: 14px;
+      opacity: 0.82;
+    }
+
+    .hero-value {
+      margin: 0;
+      font-size: clamp(32px, 8vw, 48px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-subtitle {
+      margin: 10px 0 0;
+      font-size: 13px;
+      opacity: 0.82;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      position: relative;
+      overflow: hidden;
+      padding: 15px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 5px 16px rgba(15, 23, 42, 0.04);
+    }
+
+    .metric::before {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 5px;
+      background: var(--accent);
+      content: "";
+    }
+
+    .metric span {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: clamp(17px, 4vw, 23px);
+    }
+
+    .metric.income {
+      --accent: var(--income);
+    }
+
+    .metric.monthly {
+      --accent: var(--monthly);
+    }
+
+    .metric.annual {
+      --accent: var(--annual);
+    }
+
+    .metric.expense {
+      --accent: var(--expense);
+    }
 
     .card {
-      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 17px; box-shadow: 0 6px 20px rgba(15,23,42,.045); margin-bottom: 14px;
+      padding: 17px;
+      margin-bottom: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.045);
     }
-    .card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-    .card h2, .card h3 { margin: 0; }
-    .card h2 { font-size: 19px; }
-    .card h3 { font-size: 16px; }
-    .muted { color: var(--muted); }
-    .small { font-size: 12px; }
-    .amount-positive { color: var(--income); }
-    .amount-negative { color: var(--expense); }
-    .amount-neutral { color: var(--primary); }
 
-    .progress-track { height: 12px; overflow: hidden; border-radius: 99px; background: #e2e8f0; }
-    .progress-fill { height: 100%; width: 0; border-radius: inherit; background: var(--income); transition: width .3s ease; }
-    .progress-fill.warn { background: var(--annual); }
-    .progress-fill.danger { background: var(--expense); }
-    .progress-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 8px; font-size: 12px; color: var(--muted); }
-
-    .notice-list { display: grid; gap: 9px; }
-    .notice { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border-radius: 14px; background: #fff7ed; color: #9a3412; }
-    .notice.ok { background: #f0fdf4; color: #166534; }
-    .notice.info { background: #eff6ff; color: #1e40af; }
-    .notice strong { display: block; font-size: 13px; }
-    .notice span { display: block; font-size: 12px; margin-top: 2px; opacity: .84; }
-
-    .bar-list { display: grid; gap: 12px; }
-    .bar-row-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; margin-bottom: 5px; }
-    .bar-row .progress-track { height: 8px; }
-
-    .trend { display: flex; align-items: end; gap: 7px; height: 150px; padding-top: 10px; }
-    .trend-item { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: end; align-items: center; gap: 5px; }
-    .trend-bar-wrap { width: 100%; flex: 1; display: flex; align-items: end; justify-content: center; }
-    .trend-bar { width: min(30px, 78%); min-height: 3px; border-radius: 8px 8px 3px 3px; background: linear-gradient(180deg, #ef4444, #b91c1c); }
-    .trend-item span { color: var(--muted); font-size: 10px; }
-
-    .section-title { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin: 2px 2px 14px; }
-    .section-title h2 { margin: 0; font-size: 24px; }
-    .section-title p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
-    .summary-pill { padding: 8px 11px; border-radius: 99px; background: #e0e7ff; color: #3730a3; font-size: 12px; font-weight: 700; white-space: nowrap; }
-
-    .toolbar { display: grid; grid-template-columns: 1fr auto; gap: 9px; margin-bottom: 12px; }
-    .toolbar.three { grid-template-columns: 1fr minmax(120px, .45fr) auto; }
-    .input, select, textarea {
-      width: 100%; border: 1px solid #cbd5e1; border-radius: 13px;
-      color: var(--text); background: #fff; padding: 11px 12px; outline: none;
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
     }
-    .input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
-    .btn {
-      border: 0; border-radius: 13px; padding: 11px 14px; font-weight: 700;
-      color: #fff; background: var(--primary); cursor: pointer;
+
+    .card h2,
+    .card h3 {
+      margin: 0;
     }
-    .btn:hover { background: var(--primary-dark); }
-    .btn.secondary { color: var(--text); background: #e2e8f0; }
-    .btn.secondary:hover { background: #cbd5e1; }
-    .btn.danger { background: var(--danger); }
-    .btn.ghost { color: var(--primary); background: #eff6ff; }
-    .btn.small { padding: 8px 10px; font-size: 12px; }
-    .btn-block { width: 100%; }
 
-    .segmented { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; padding: 4px; border-radius: 15px; background: #e2e8f0; margin-bottom: 14px; }
-    .segmented button { border: 0; border-radius: 11px; padding: 10px 8px; color: var(--muted); background: transparent; font-weight: 700; cursor: pointer; }
-    .segmented button.active { color: var(--text); background: #fff; box-shadow: 0 3px 10px rgba(15,23,42,.08); }
+    .card h2 {
+      font-size: 19px;
+    }
 
-    .entry-list { display: grid; gap: 9px; }
+    .card h3 {
+      font-size: 16px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .small {
+      font-size: 12px;
+    }
+
+    .positive {
+      color: var(--income);
+    }
+
+    .negative {
+      color: var(--expense);
+    }
+
+    .progress-track {
+      height: 12px;
+      overflow: hidden;
+      background: #e2e8f0;
+      border-radius: 99px;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: var(--income);
+      border-radius: inherit;
+      transition: width 0.3s ease;
+    }
+
+    .progress-fill.warning {
+      background: var(--annual);
+    }
+
+    .progress-fill.danger {
+      background: var(--expense);
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    details.card {
+      padding: 0;
+    }
+
+    details.card summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    details.card summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.card summary::after {
+      color: var(--muted);
+      content: "⌄";
+    }
+
+    details.card[open] summary::after {
+      transform: rotate(180deg);
+    }
+
+    .details-content {
+      padding: 0 17px 17px;
+    }
+
+    .notice-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .notice {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px;
+      color: #9a3412;
+      background: #fff7ed;
+      border-radius: 14px;
+    }
+
+    .notice.success {
+      color: #166534;
+      background: #f0fdf4;
+    }
+
+    .notice strong,
+    .notice span {
+      display: block;
+    }
+
+    .notice strong {
+      font-size: 13px;
+    }
+
+    .notice span {
+      margin-top: 2px;
+      font-size: 12px;
+      opacity: 0.84;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 2px 2px 14px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .section-title p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .summary-pill {
+      padding: 8px 11px;
+      color: #3730a3;
+      background: #e0e7ff;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+      padding: 4px;
+      margin-bottom: 14px;
+      background: #e2e8f0;
+      border-radius: 15px;
+    }
+
+    .segmented button {
+      padding: 10px 8px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 11px;
+      font-weight: 800;
+    }
+
+    .segmented button.active {
+      color: var(--text);
+      background: white;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+
+    .toolbar.with-filter {
+      grid-template-columns: 1fr minmax(120px, 0.45fr);
+    }
+
+    .input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px 12px;
+      color: var(--text);
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 13px;
+      outline: none;
+    }
+
+    .input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .button {
+      padding: 11px 14px;
+      color: white;
+      background: var(--primary);
+      border: 0;
+      border-radius: 13px;
+      font-weight: 800;
+    }
+
+    .button.secondary {
+      color: var(--text);
+      background: #e2e8f0;
+    }
+
+    .button.soft {
+      color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .button.danger {
+      color: white;
+      background: var(--danger);
+    }
+
+    .button.small {
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .button.block {
+      width: 100%;
+    }
+
+    .entry-list {
+      display: grid;
+      gap: 9px;
+    }
+
     .entry {
-      display: grid; grid-template-columns: 1fr auto; gap: 10px;
-      background: var(--surface); border: 1px solid var(--line); border-radius: 17px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
       padding: 13px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
     }
-    .entry-main { min-width: 0; }
-    .entry-title { display: flex; align-items: center; gap: 7px; min-width: 0; }
-    .entry-title strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .entry-meta { margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.4; }
-    .entry-amount { text-align: right; font-weight: 800; white-space: nowrap; }
-    .entry-actions { display: flex; justify-content: flex-end; gap: 5px; margin-top: 8px; }
-    .mini-action { width: 31px; height: 31px; display: grid; place-items: center; border: 0; border-radius: 10px; color: #334155; background: #f1f5f9; cursor: pointer; }
-    .mini-action.delete { color: var(--danger); background: #fef2f2; }
-    .badge { display: inline-flex; align-items: center; padding: 3px 7px; border-radius: 99px; font-size: 10px; font-weight: 800; background: #e2e8f0; color: #475569; }
-    .badge.income { background: #dcfce7; color: #166534; }
-    .badge.monthly { background: #dbeafe; color: #1e40af; }
-    .badge.annual { background: #fef3c7; color: #92400e; }
-    .badge.expense { background: #fee2e2; color: #991b1b; }
-    .empty { text-align: center; padding: 28px 16px; color: var(--muted); border: 1px dashed #cbd5e1; border-radius: 17px; background: rgba(255,255,255,.5); }
 
-    .goals { display: grid; gap: 10px; }
-    .goal { padding: 13px; border-radius: 15px; background: var(--surface-2); border: 1px solid var(--line); }
-    .goal-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
-    .goal-actions { display: flex; gap: 6px; margin-top: 9px; }
+    .entry-main {
+      min-width: 0;
+    }
+
+    .entry-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .entry-title strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .entry-meta {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .entry-amount {
+      text-align: right;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .entry-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .mini-button {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      color: #334155;
+      background: #f1f5f9;
+      border: 0;
+      border-radius: 10px;
+    }
+
+    .mini-button.delete {
+      color: var(--danger);
+      background: #fef2f2;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 7px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .badge.income {
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .badge.monthly {
+      color: #1e40af;
+      background: #dbeafe;
+    }
+
+    .badge.annual {
+      color: #92400e;
+      background: #fef3c7;
+    }
+
+    .badge.expense {
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .empty {
+      padding: 28px 16px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px dashed #cbd5e1;
+      border-radius: 17px;
+      text-align: center;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bar-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+
+    .bar-list .progress-track {
+      height: 8px;
+    }
+
+    .trend {
+      display: flex;
+      align-items: flex-end;
+      gap: 7px;
+      height: 150px;
+      padding-top: 10px;
+    }
+
+    .trend-column {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 0;
+      height: 100%;
+      gap: 5px;
+    }
+
+    .trend-area {
+      display: flex;
+      flex: 1;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .trend-bar {
+      width: min(30px, 78%);
+      min-height: 3px;
+      background: linear-gradient(180deg, #ef4444, #b91c1c);
+      border-radius: 8px 8px 3px 3px;
+    }
+
+    .trend-column span {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .goal-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .goal {
+      padding: 13px;
+      background: var(--surface-secondary);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+    }
+
+    .goal-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .goal-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 9px;
+    }
+
+    .year-table-wrapper {
+      overflow-x: auto;
+    }
+
+    .year-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .year-table th,
+    .year-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .year-table th:first-child,
+    .year-table td:first-child {
+      text-align: left;
+    }
+
+    .year-table tbody tr {
+      cursor: pointer;
+    }
+
+    .year-table tbody tr:hover {
+      background: #f8fafc;
+    }
 
     .bottom-nav {
-      position: fixed; z-index: 50; left: 0; right: 0; bottom: 0;
-      height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+      position: fixed;
+      z-index: 50;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      height:
+        calc(var(--nav-height) + env(safe-area-inset-bottom));
       padding: 8px 7px env(safe-area-inset-bottom);
-      border-top: 1px solid rgba(148,163,184,.35);
-      background: rgba(255,255,255,.94);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: rgba(255, 255, 255, 0.94);
+      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
-    .nav-button { border: 0; border-radius: 14px; color: var(--muted); background: transparent; display: grid; place-items: center; align-content: center; gap: 3px; font-size: 10px; cursor: pointer; }
-    .nav-button svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .nav-button.active { color: var(--primary); background: #eff6ff; font-weight: 800; }
+
+    .nav-button {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 3px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 14px;
+      font-size: 10px;
+    }
+
+    .nav-button.active {
+      color: var(--primary);
+      background: #eff6ff;
+      font-weight: 800;
+    }
+
+    .nav-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
 
     .fab {
-      position: fixed; z-index: 60; right: max(18px, calc((100vw - 980px) / 2 + 18px));
-      bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 14px);
-      width: 58px; height: 58px; border: 0; border-radius: 20px;
-      color: #fff; background: var(--primary); box-shadow: 0 12px 28px rgba(37,99,235,.34);
-      font-size: 30px; line-height: 1; cursor: pointer;
+      position: fixed;
+      z-index: 60;
+      right: max(
+        18px,
+        calc((100vw - 980px) / 2 + 18px)
+      );
+      bottom:
+        calc(
+          var(--nav-height) +
+          env(safe-area-inset-bottom) +
+          14px
+        );
+      width: 58px;
+      height: 58px;
+      color: white;
+      background: var(--primary);
+      border: 0;
+      border-radius: 20px;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.34);
+      font-size: 30px;
     }
 
     .modal-backdrop {
-      position: fixed; z-index: 100; inset: 0;
-      display: flex; align-items: end; justify-content: center;
-      background: rgba(15,23,42,.48); padding: 18px 10px 0;
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 18px 10px 0;
+      background: rgba(15, 23, 42, 0.48);
     }
+
     .modal {
-      width: min(620px, 100%); max-height: calc(92vh - env(safe-area-inset-top)); overflow: auto;
-      background: #fff; border-radius: 24px 24px 0 0; padding: 18px 17px calc(18px + env(safe-area-inset-bottom));
-      box-shadow: 0 -18px 55px rgba(15,23,42,.2);
+      width: min(620px, 100%);
+      max-height:
+        calc(92vh - env(safe-area-inset-top));
+      overflow: auto;
+      padding:
+        18px
+        17px
+        calc(18px + env(safe-area-inset-bottom));
+      background: white;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -18px 55px rgba(15, 23, 42, 0.2);
     }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 15px; }
-    .modal-header h2 { margin: 0; font-size: 20px; }
-    .close-button { border: 0; border-radius: 50%; width: 36px; height: 36px; background: #f1f5f9; cursor: pointer; font-size: 20px; }
-    .form-grid { display: grid; gap: 12px; }
-    .form-row { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
-    label { display: grid; gap: 6px; color: #475569; font-size: 12px; font-weight: 700; }
-    label span { color: var(--muted); font-weight: 500; }
-    .choice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .choice { border: 1px solid var(--line); border-radius: 17px; padding: 18px 10px; text-align: center; background: #fff; cursor: pointer; }
-    .choice b { display: block; margin-top: 7px; }
 
-    .settings-section { padding: 14px 0; border-top: 1px solid var(--line); }
-    .settings-section:first-of-type { border-top: 0; padding-top: 0; }
-    .settings-section h3 { margin: 0 0 9px; font-size: 15px; }
-    .settings-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; }
-    .file-input { display: none; }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
 
-    .lock-screen { position: fixed; z-index: 200; inset: 0; display: grid; place-items: center; background: linear-gradient(145deg,#0f172a,#1e3a8a); padding: 20px; }
-    .lock-card { width: min(400px,100%); background: #fff; border-radius: 24px; padding: 24px; text-align: center; }
-    .lock-card h2 { margin: 5px 0; }
-    .lock-card p { color: var(--muted); margin: 6px 0 18px; }
-    .toast { position: fixed; z-index: 300; left: 50%; bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 22px); transform: translate(-50%, 20px); opacity: 0; pointer-events: none; color: #fff; background: #0f172a; border-radius: 13px; padding: 11px 15px; font-size: 13px; transition: .22s ease; box-shadow: var(--shadow); }
-    .toast.show { opacity: 1; transform: translate(-50%, 0); }
-    .print-report { display: none; }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
 
-    @media print {
-      body { background: #fff; padding: 0; }
-      .app, .bottom-nav, .fab, .modal-backdrop, .lock-screen, .toast { display: none !important; }
-      .print-report { display: block; color: #000; padding: 12mm; font-family: Arial, sans-serif; }
-      .print-report h1 { margin: 0 0 3mm; }
-      .print-report p { color: #475569; margin: 0 0 7mm; }
-      .print-report table { width: 100%; border-collapse: collapse; font-size: 10pt; }
-      .print-report th, .print-report td { border: 1px solid #cbd5e1; padding: 2.5mm; text-align: right; }
-      .print-report th:first-child, .print-report td:first-child { text-align: left; }
-      .print-report thead { background: #e2e8f0; }
-      .print-report tfoot { font-weight: 700; background: #f8fafc; }
+    .close-button {
+      width: 36px;
+      height: 36px;
+      background: #f1f5f9;
+      border: 0;
+      border-radius: 50%;
+      font-size: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: #475569;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    label span {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .choice-button {
+      padding: 20px 10px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      text-align: center;
+    }
+
+    .choice-button strong {
+      display: block;
+      margin-top: 7px;
+    }
+
+    .settings-section {
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .settings-section:first-of-type {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .settings-section h3 {
+      margin: 0 0 9px;
+      font-size: 15px;
+    }
+
+    .settings-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 300;
+      bottom:
+        calc(
+          var(--nav-height) +
+          env(safe-area-inset-bottom) +
+          22px
+        );
+      left: 50%;
+      max-width: calc(100% - 30px);
+      padding: 11px 15px;
+      color: white;
+      background: #0f172a;
+      border-radius: 13px;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 20px);
+      transition: 0.22s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
     }
 
     @media (min-width: 720px) {
-      main { padding: 24px; }
-      .metrics { grid-template-columns: repeat(4, 1fr); }
-      .dashboard-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-      .dashboard-grid .card { margin-bottom: 0; }
-      .modal-backdrop { align-items: center; padding: 20px; }
-      .modal { border-radius: 24px; padding-bottom: 18px; }
+      main {
+        padding: 24px;
+      }
+
+      .metrics {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .analysis-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .modal-backdrop {
+        align-items: center;
+        padding: 20px;
+      }
+
+      .modal {
+        padding-bottom: 18px;
+        border-radius: 24px;
+      }
     }
+
     @media (max-width: 520px) {
-      .toolbar.three { grid-template-columns: 1fr 1fr; }
-      .toolbar.three .btn { grid-column: 1 / -1; }
-      .form-row { grid-template-columns: 1fr; }
-      .settings-actions { grid-template-columns: 1fr; }
+      .form-row,
+      .settings-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        align-items: flex-start;
+      }
+
+      .section-title p {
+        max-width: 230px;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="app">
     <header class="topbar">
       <div class="topbar-row">
-        <div class="brand">
+        <div>
           <p class="eyebrow">Persönliche Finanzplanung</p>
           <h1>Mein Budget</h1>
         </div>
-        <button class="icon-button" id="settingsButton" aria-label="Einstellungen">⚙︎</button>
+
+        <button
+          class="settings-button"
+          id="settingsButton"
+          aria-label="Einstellungen"
+        >
+          ⚙︎
+        </button>
       </div>
-      <div class="period-picker">
-        <button id="previousMonth" aria-label="Vorheriger Monat">‹</button>
-        <button class="period-label" id="periodLabel" type="button"></button>
-        <button id="nextMonth" aria-label="Nächster Monat">›</button>
+
+      <div class="month-picker">
+        <button id="previousMonth" aria-label="Vorheriger Monat">
+          ‹
+        </button>
+
+        <button class="month-label" id="monthLabel">
+          Monat
+        </button>
+
+        <button id="nextMonth" aria-label="Nächster Monat">
+          ›
+        </button>
       </div>
     </header>
 
     <main>
       <section class="view active" id="view-dashboard">
         <div class="hero" id="remainingHero">
-          <p class="hero-label" id="remainingLabel">Noch verfügbar</p>
-          <h2 class="hero-value" id="remainingValue">CHF 0.00</h2>
-          <p class="hero-sub" id="remainingSub">Einnahmen minus alle Kosten</p>
+          <p class="hero-label" id="remainingLabel">
+            Noch verfügbar
+          </p>
+
+          <h2 class="hero-value" id="remainingValue">
+            CHF 0.00
+          </h2>
+
+          <p class="hero-subtitle" id="remainingSubtitle">
+            Einnahmen minus alle Kosten
+          </p>
         </div>
 
         <div class="metrics">
-          <div class="metric income"><span>Einnahmen</span><strong id="metricIncome">CHF 0.00</strong></div>
-          <div class="metric monthly"><span>Monatliche Fixkosten</span><strong id="metricMonthly">CHF 0.00</strong></div>
-          <div class="metric annual"><span>Rücklage Jahreskosten</span><strong id="metricAnnual">CHF 0.00</strong></div>
-          <div class="metric expense"><span>Variable Ausgaben</span><strong id="metricExpenses">CHF 0.00</strong></div>
+          <div class="metric income">
+            <span>Einnahmen</span>
+            <strong id="incomeMetric">CHF 0.00</strong>
+          </div>
+
+          <div class="metric monthly">
+            <span>Monatliche Fixkosten</span>
+            <strong id="monthlyMetric">CHF 0.00</strong>
+          </div>
+
+          <div class="metric annual">
+            <span>Rücklage Jahreskosten</span>
+            <strong id="annualMetric">CHF 0.00</strong>
+          </div>
+
+          <div class="metric expense">
+            <span>Variable Ausgaben</span>
+            <strong id="expenseMetric">CHF 0.00</strong>
+          </div>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <div><h2>Variables Monatsbudget</h2><div class="muted small">Ausgaben gegenüber deinen Kategorie-Budgets</div></div>
+            <div>
+              <h2>Variables Monatsbudget</h2>
+              <div class="muted small">
+                Tatsächliche Ausgaben gegenüber deinem Budget
+              </div>
+            </div>
+
             <strong id="budgetPercent">0 %</strong>
           </div>
-          <div class="progress-track"><div class="progress-fill" id="budgetProgress"></div></div>
-          <div class="progress-meta"><span id="budgetUsed">CHF 0.00 verwendet</span><span id="budgetLimit">von CHF 0.00</span></div>
+
+          <div class="progress-track">
+            <div class="progress-fill" id="budgetProgress"></div>
+          </div>
+
+          <div class="progress-meta">
+            <span id="budgetUsed">CHF 0.00 verwendet</span>
+            <span id="budgetMaximum">von CHF 0.00</span>
+          </div>
         </div>
 
-        <div class="card" id="noticeCard">
-          <div class="card-header"><h2>Hinweise</h2></div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Hinweise</h2>
+          </div>
+
           <div class="notice-list" id="noticeList"></div>
         </div>
 
-        <div class="dashboard-grid">
-          <div class="card">
-            <div class="card-header"><div><h2>Kategorien</h2><div class="muted small">Budget und tatsächliche Ausgaben</div></div></div>
-            <div class="bar-list" id="categoryBars"></div>
+        <details class="card">
+          <summary>Weitere Auswertungen</summary>
+
+          <div class="details-content">
+            <div class="analysis-grid">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2>Kategorien</h2>
+                    <div class="muted small">
+                      Budget und tatsächliche Ausgaben
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bar-list" id="categoryBars"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2>6-Monats-Verlauf</h2>
+                    <div class="muted small">
+                      Variable Ausgaben
+                    </div>
+                  </div>
+                </div>
+
+                <div class="trend" id="trendChart"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2>Jahresprognose</h2>
+                    <div class="muted small">
+                      Aktuelle Werte und geplante Folgemonate
+                    </div>
+                  </div>
+                </div>
+
+                <h3 id="forecastValue">CHF 0.00</h3>
+                <p class="muted small" id="forecastText"></p>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2>Sparziele</h2>
+                    <div class="muted small">
+                      Fortschritt auf einen Blick
+                    </div>
+                  </div>
+
+                  <button
+                    class="button soft small"
+                    data-action="add-goal"
+                  >
+                    + Ziel
+                  </button>
+                </div>
+
+                <div class="goal-list" id="goalList"></div>
+              </div>
+            </div>
           </div>
-          <div class="card">
-            <div class="card-header"><div><h2>6-Monats-Verlauf</h2><div class="muted small">Variable Ausgaben</div></div></div>
-            <div class="trend" id="trendChart"></div>
+        </details>
+
+        <details class="card">
+          <summary>Jahresübersicht</summary>
+
+          <div class="details-content">
+            <div
+              class="year-table-wrapper"
+              id="yearTable"
+            ></div>
           </div>
-          <div class="card">
-            <div class="card-header"><div><h2>Jahresprognose</h2><div class="muted small">Aktuelle Werte plus geplante Folgemonate</div></div></div>
-            <h3 class="amount-neutral" id="forecastValue">CHF 0.00</h3>
-            <p class="muted small" id="forecastText"></p>
-          </div>
-          <div class="card">
-            <div class="card-header"><div><h2>Sparziele</h2><div class="muted small">Dein Fortschritt auf einen Blick</div></div><button class="btn ghost small" data-action="add-goal">+ Ziel</button></div>
-            <div class="goals" id="goalList"></div>
-          </div>
-        </div>
+        </details>
       </section>
 
       <section class="view" id="view-income">
-        <div class="section-title"><div><h2>Einnahmen</h2><p>Fixeinnahmen gelten in jedem Monat, Zusatzeinnahmen nur im gewählten Monat.</p></div><span class="summary-pill" id="incomeTotalPill">CHF 0.00</span></div>
-        <div class="segmented" id="incomeSegment"><button class="active" data-income-mode="fixed">Fixeinnahmen</button><button data-income-mode="extra">Zusatzeinnahmen</button></div>
-        <div class="toolbar"><input class="input" id="incomeSearch" placeholder="Einnahmen durchsuchen"><button class="btn" data-action="add-income">+ Neu</button></div>
+        <div class="section-title">
+          <div>
+            <h2>Einnahmen</h2>
+            <p>
+              Fixeinnahmen gelten jeden Monat,
+              Zusatzeinnahmen nur im gewählten Monat.
+            </p>
+          </div>
+
+          <span class="summary-pill" id="incomeTotal">
+            CHF 0.00
+          </span>
+        </div>
+
+        <div class="segmented">
+          <button
+            class="active"
+            data-income-mode="fixed"
+          >
+            Fixeinnahmen
+          </button>
+
+          <button data-income-mode="extra">
+            Zusatzeinnahmen
+          </button>
+        </div>
+
+        <div class="toolbar">
+          <input
+            class="input"
+            id="incomeSearch"
+            placeholder="Einnahmen durchsuchen"
+          >
+        </div>
+
         <div class="entry-list" id="incomeList"></div>
       </section>
 
       <section class="view" id="view-fixed">
-        <div class="section-title"><div><h2>Fixkosten</h2><p>Globale Kosten, die automatisch in allen Monaten berücksichtigt werden.</p></div><span class="summary-pill" id="fixedTotalPill">CHF 0.00</span></div>
-        <div class="segmented" id="fixedSegment"><button class="active" data-fixed-mode="monthly">Monatlich</button><button data-fixed-mode="annual">Jährlich</button></div>
-        <div class="toolbar three"><input class="input" id="fixedSearch" placeholder="Fixkosten durchsuchen"><select id="fixedFilter"><option value="">Alle Kategorien</option></select><button class="btn" data-action="add-fixed">+ Neu</button></div>
+        <div class="section-title">
+          <div>
+            <h2>Fixkosten</h2>
+            <p>
+              Diese Kosten werden automatisch in allen Monaten
+              berücksichtigt.
+            </p>
+          </div>
+
+          <span class="summary-pill" id="fixedTotal">
+            CHF 0.00
+          </span>
+        </div>
+
+        <div class="segmented">
+          <button
+            class="active"
+            data-fixed-mode="monthly"
+          >
+            Monatlich
+          </button>
+
+          <button data-fixed-mode="annual">
+            Jährlich
+          </button>
+        </div>
+
+        <div class="toolbar with-filter">
+          <input
+            class="input"
+            id="fixedSearch"
+            placeholder="Fixkosten durchsuchen"
+          >
+
+          <select id="fixedFilter">
+            <option value="">Alle Kategorien</option>
+          </select>
+        </div>
+
         <div class="entry-list" id="fixedList"></div>
       </section>
 
       <section class="view" id="view-expenses">
-        <div class="section-title"><div><h2>Ausgaben</h2><p>Variable Ausgaben im ausgewählten Monat.</p></div><span class="summary-pill" id="expenseTotalPill">CHF 0.00</span></div>
-        <div class="toolbar three"><input class="input" id="expenseSearch" placeholder="Ausgaben durchsuchen"><select id="expenseFilter"><option value="">Alle Kategorien</option></select><button class="btn" data-action="add-expense">+ Neu</button></div>
+        <div class="section-title">
+          <div>
+            <h2>Ausgaben</h2>
+            <p>
+              Variable Ausgaben im ausgewählten Monat.
+            </p>
+          </div>
+
+          <span class="summary-pill" id="expenseTotal">
+            CHF 0.00
+          </span>
+        </div>
+
+        <div class="toolbar with-filter">
+          <input
+            class="input"
+            id="expenseSearch"
+            placeholder="Ausgaben durchsuchen"
+          >
+
+          <select id="expenseFilter">
+            <option value="">Alle Kategorien</option>
+          </select>
+        </div>
+
         <div class="entry-list" id="expenseList"></div>
       </section>
     </main>
   </div>
 
-  <button class="fab" id="fab" aria-label="Neuen Eintrag hinzufügen">+</button>
+  <button
+    class="fab"
+    id="addButton"
+    aria-label="Neuen Eintrag hinzufügen"
+  >
+    +
+  </button>
 
-  <nav class="bottom-nav" aria-label="Hauptnavigation">
-    <button class="nav-button active" data-view="dashboard"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Cockpit</span></button>
-    <button class="nav-button" data-view="income"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Einnahmen</span></button>
-    <button class="nav-button" data-view="fixed"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21H3z"/><path d="M9 21v-7h6v7"/></svg><span>Fixkosten</span></button>
-    <button class="nav-button" data-view="expenses"><svg viewBox="0 0 24 24"><path d="M6 2h12l1 20-7-3-7 3z"/><path d="M9 8h6M9 12h6"/></svg><span>Ausgaben</span></button>
+  <nav class="bottom-nav">
+    <button
+      class="nav-button active"
+      data-view="dashboard"
+    >
+      <span class="nav-icon">▦</span>
+      <span>Cockpit</span>
+    </button>
+
+    <button
+      class="nav-button"
+      data-view="income"
+    >
+      <span class="nav-icon">＋</span>
+      <span>Einnahmen</span>
+    </button>
+
+    <button
+      class="nav-button"
+      data-view="fixed"
+    >
+      <span class="nav-icon">⌂</span>
+      <span>Fixkosten</span>
+    </button>
+
+    <button
+      class="nav-button"
+      data-view="expenses"
+    >
+      <span class="nav-icon">−</span>
+      <span>Ausgaben</span>
+    </button>
   </nav>
 
-  <div class="modal-backdrop hidden" id="modalBackdrop" role="dialog" aria-modal="true">
+  <div
+    class="modal-backdrop hidden"
+    id="modalBackdrop"
+  >
     <div class="modal" id="modalContent"></div>
   </div>
 
-  <div class="lock-screen hidden" id="lockScreen">
-    <div class="lock-card">
-      <div style="font-size:42px">🔒</div><h2>Budget gesperrt</h2><p>Gib deine PIN ein.</p>
-      <form id="unlockForm" class="form-grid"><input class="input" id="unlockPin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN" required><button class="btn" type="submit">Entsperren</button><div class="small amount-negative" id="unlockError"></div></form>
-    </div>
-  </div>
   <div class="toast" id="toast"></div>
-  <section class="print-report" id="printReport"></section>
 
   <script>
-  (() => {
-    'use strict';
+    (() => {
+      "use strict";
 
-    const STORAGE_KEY = 'budgetplaner_v4';
-    const MONTHS = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
-    const DEFAULT_CATEGORIES = ['Lebensmittel','Restaurant & Freizeit','Haushalt','Gesundheit','Kleidung','Mobilität','Reisen','Hobby','Geschenke','Sonstiges'];
-    const FIXED_CATEGORIES = ['Wohnen','Versicherung','Kommunikation','Mobilität','Abos','Gesundheit','Familie','Sparen & Investieren','Steuern','Sonstiges'];
-    const today = new Date();
+      const STORAGE_KEY = "budgetplaner_v5";
 
-    const defaultState = () => ({
-      version: 4,
-      selectedMonth: `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`,
-      fixedIncomes: [],
-      extraIncomes: [],
-      monthlyFixedCosts: [],
-      annualFixedCosts: [],
-      expenses: [],
-      categoryBudgets: Object.fromEntries(DEFAULT_CATEGORIES.map(c => [c, 0])),
-      savingGoals: [],
-      settings: { pinHash: '', lastExpenseCategory: 'Lebensmittel' }
-    });
+      const months = [
+        "Januar",
+        "Februar",
+        "März",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember"
+      ];
 
-    let state = loadState();
-    let activeView = 'dashboard';
-    let incomeMode = 'fixed';
-    let fixedMode = 'monthly';
-    let editing = null;
+      const expenseCategories = [
+        "Lebensmittel",
+        "Restaurant & Freizeit",
+        "Haushalt",
+        "Gesundheit",
+        "Kleidung",
+        "Mobilität",
+        "Reisen",
+        "Hobby",
+        "Geschenke",
+        "Sonstiges"
+      ];
 
-    const $ = (id) => document.getElementById(id);
-    const money = (value) => new Intl.NumberFormat('de-CH', { style:'currency', currency:'CHF', minimumFractionDigits:2 }).format(Number(value) || 0);
-    const uid = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`);
-    const esc = (value='') => String(value).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-    const num = (value) => Math.max(0, Number(String(value).replace(',', '.')) || 0);
-    const selectedYear = () => Number(state.selectedMonth.slice(0,4));
-    const selectedMonthIndex = () => Number(state.selectedMonth.slice(5,7)) - 1;
-    const currentDateForSelectedMonth = () => {
-      const nowKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-      if (state.selectedMonth === nowKey) return `${state.selectedMonth}-${String(today.getDate()).padStart(2,'0')}`;
-      return `${state.selectedMonth}-01`;
-    };
+      const fixedCategories = [
+        "Wohnen",
+        "Versicherung",
+        "Kommunikation",
+        "Mobilität",
+        "Abos",
+        "Gesundheit",
+        "Familie",
+        "Sparen & Investieren",
+        "Steuern",
+        "Sonstiges"
+      ];
 
-    function loadState() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        if (!saved || typeof saved !== 'object') return defaultState();
-        const base = defaultState();
+      const today = new Date();
+
+      function currentMonthKey() {
+        return (
+          today.getFullYear() +
+          "-" +
+          String(today.getMonth() + 1).padStart(2, "0")
+        );
+      }
+
+      function createDefaultState() {
         return {
-          ...base, ...saved,
-          selectedMonth: base.selectedMonth,
-          fixedIncomes: Array.isArray(saved.fixedIncomes) ? saved.fixedIncomes : [],
-          extraIncomes: Array.isArray(saved.extraIncomes) ? saved.extraIncomes : [],
-          monthlyFixedCosts: Array.isArray(saved.monthlyFixedCosts) ? saved.monthlyFixedCosts : [],
-          annualFixedCosts: Array.isArray(saved.annualFixedCosts) ? saved.annualFixedCosts : [],
-          expenses: Array.isArray(saved.expenses) ? saved.expenses : [],
-          savingGoals: Array.isArray(saved.savingGoals) ? saved.savingGoals : [],
-          categoryBudgets: {...base.categoryBudgets, ...(saved.categoryBudgets || {})},
-          settings: {...base.settings, ...(saved.settings || {})}
+          version: 5,
+          selectedMonth: currentMonthKey(),
+          fixedIncomes: [],
+          extraIncomes: [],
+          monthlyFixedCosts: [],
+          annualFixedCosts: [],
+          expenses: [],
+          categoryBudgets: Object.fromEntries(
+            expenseCategories.map(category => [category, 0])
+          ),
+          savingGoals: [],
+          settings: {
+            lastExpenseCategory: "Lebensmittel",
+            lastBackup: ""
+          }
         };
-      } catch { return defaultState(); }
-    }
-
-    function saveState(message) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      if (message) showToast(message);
-    }
-
-    function monthKeyFromDate(date) { return String(date || '').slice(0,7); }
-    function sum(items, field='amount') { return items.reduce((total, item) => total + num(item[field]), 0); }
-    function fixedIncomeTotal() { return sum(state.fixedIncomes); }
-    function extraIncomeFor(month) { return state.extraIncomes.filter(x => monthKeyFromDate(x.date) === month); }
-    function expensesFor(month) { return state.expenses.filter(x => monthKeyFromDate(x.date) === month); }
-    function monthlyFixedTotal() { return sum(state.monthlyFixedCosts); }
-    function annualTotal() { return sum(state.annualFixedCosts, 'annualAmount'); }
-    function annualReserve() { return annualTotal() / 12; }
-    function incomeFor(month) { return fixedIncomeTotal() + sum(extraIncomeFor(month)); }
-    function variableFor(month) { return sum(expensesFor(month)); }
-    function categoryBudgetTotal() { return Object.values(state.categoryBudgets).reduce((a,b) => a + num(b), 0); }
-    function remainingFor(month) { return incomeFor(month) - monthlyFixedTotal() - annualReserve() - variableFor(month); }
-
-    function changeMonth(delta) {
-      const date = new Date(selectedYear(), selectedMonthIndex() + delta, 1);
-      state.selectedMonth = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
-      saveState(); renderAll();
-    }
-
-    function showMonthPicker() {
-      const year = selectedYear();
-      openModal(`
-        <div class="modal-header"><h2>Zeitraum wählen</h2><button class="close-button" data-close>×</button></div>
-        <form id="periodForm" class="form-grid">
-          <label>Monat<select name="month">${MONTHS.map((m,i)=>`<option value="${i+1}" ${i===selectedMonthIndex()?'selected':''}>${m}</option>`).join('')}</select></label>
-          <label>Jahr<input class="input" name="year" type="number" min="2020" max="2100" value="${year}" required></label>
-          <button class="btn" type="submit">Übernehmen</button>
-        </form>`);
-      $('periodForm').addEventListener('submit', e => {
-        e.preventDefault(); const fd = new FormData(e.currentTarget);
-        state.selectedMonth = `${fd.get('year')}-${String(fd.get('month')).padStart(2,'0')}`;
-        saveState(); closeModal(); renderAll();
-      });
-    }
-
-    function switchView(view) {
-      activeView = view;
-      document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${view}`));
-      document.querySelectorAll('.nav-button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
-      renderAll(); window.scrollTo({top:0, behavior:'smooth'});
-    }
-
-    function renderAll() {
-      $('periodLabel').textContent = `${MONTHS[selectedMonthIndex()]} ${selectedYear()}`;
-      renderDashboard(); renderIncome(); renderFixed(); renderExpenses();
-    }
-
-    function renderDashboard() {
-      const income = incomeFor(state.selectedMonth);
-      const monthly = monthlyFixedTotal();
-      const reserve = annualReserve();
-      const expenses = variableFor(state.selectedMonth);
-      const remaining = income - monthly - reserve - expenses;
-      const previousDate = new Date(selectedYear(), selectedMonthIndex()-1, 1);
-      const previousKey = `${previousDate.getFullYear()}-${String(previousDate.getMonth()+1).padStart(2,'0')}`;
-      const previousExpenses = variableFor(previousKey);
-      const comparison = previousExpenses > 0 ? `${Math.abs(Math.round((expenses-previousExpenses)/previousExpenses*100))} % ${expenses<=previousExpenses?'weniger':'mehr'} variable Ausgaben als im Vormonat` : 'Noch kein Vergleich zum Vormonat möglich';
-      $('remainingValue').textContent = money(remaining);
-      $('remainingLabel').textContent = remaining >= 0 ? `Im ${MONTHS[selectedMonthIndex()]} noch verfügbar` : `Budget im ${MONTHS[selectedMonthIndex()]} überschritten`;
-      $('remainingSub').textContent = `Sparquote ${income > 0 ? Math.round((remaining/income)*100) : 0} % · ${comparison}`;
-      $('remainingHero').classList.toggle('over', remaining < 0);
-      $('metricIncome').textContent = money(income);
-      $('metricMonthly').textContent = money(monthly);
-      $('metricAnnual').textContent = money(reserve);
-      $('metricExpenses').textContent = money(expenses);
-
-      const limit = categoryBudgetTotal();
-      const pct = limit > 0 ? (expenses / limit) * 100 : 0;
-      $('budgetPercent').textContent = limit > 0 ? `${Math.round(pct)} %` : 'Kein Budget';
-      $('budgetUsed').textContent = `${money(expenses)} verwendet`;
-      $('budgetLimit').textContent = `von ${money(limit)}`;
-      $('budgetProgress').style.width = `${Math.min(100, pct)}%`;
-      $('budgetProgress').className = `progress-fill${pct >= 100 ? ' danger' : pct >= 80 ? ' warn' : ''}`;
-      renderNotices(); renderCategoryBars(); renderTrend(); renderForecast(); renderGoals();
-    }
-
-    function renderNotices() {
-      const notices = [];
-      const expenses = expensesFor(state.selectedMonth);
-      const byCat = groupTotals(expenses, 'category');
-      Object.entries(state.categoryBudgets).forEach(([cat,budget]) => {
-        const b = num(budget), used = byCat[cat] || 0;
-        if (b > 0 && used >= b) notices.push({type:'warn', icon:'!', title:`${cat}: Budget überschritten`, text:`${money(used)} von ${money(b)}`});
-        else if (b > 0 && used/b >= .8) notices.push({type:'warn', icon:'!', title:`${cat}: ${Math.round(used/b*100)} % verbraucht`, text:`Noch ${money(b-used)} verfügbar`});
-      });
-      const month = selectedMonthIndex() + 1;
-      state.annualFixedCosts.forEach(x => {
-        const dueMonth=Number(x.dueMonth)||1, distance=(dueMonth-month+12)%12;
-        if(distance>2)return;
-        const dueYear=selectedYear()+(dueMonth<month?1:0);
-        const paid = Array.isArray(x.paidYears) && x.paidYears.includes(dueYear);
-        const timing=distance===0?'jetzt fällig':`in ${distance} Monat${distance===1?'':'en'} fällig`;
-        notices.push({type:paid?'ok':'warn', icon:paid?'✓':'◷', title:`${esc(x.description)} ${paid?'bezahlt':timing}`, text:`${MONTHS[dueMonth-1]} ${dueYear} · ${money(x.annualAmount)}`});
-      });
-      if (!notices.length) notices.push({type:'ok', icon:'✓', title:'Alles im grünen Bereich', text:'Aktuell gibt es keine Budgetwarnungen oder fälligen Jahresrechnungen.'});
-      $('noticeList').innerHTML = notices.slice(0,6).map(n => `<div class="notice ${n.type === 'ok' ? 'ok' : ''}"><b>${n.icon}</b><div><strong>${n.title}</strong><span>${n.text}</span></div></div>`).join('');
-    }
-
-    function groupTotals(items, field) {
-      return items.reduce((out,item) => { const key=item[field] || 'Sonstiges'; out[key]=(out[key]||0)+num(item.amount); return out; },{});
-    }
-
-    function renderCategoryBars() {
-      const totals = groupTotals(expensesFor(state.selectedMonth), 'category');
-      const categories = [...new Set([...Object.keys(state.categoryBudgets), ...Object.keys(totals)])].filter(c => num(state.categoryBudgets[c]) > 0 || totals[c] > 0);
-      if (!categories.length) { $('categoryBars').innerHTML = '<div class="empty">Lege unter Einstellungen zuerst Kategorie-Budgets fest.</div>'; return; }
-      $('categoryBars').innerHTML = categories.sort((a,b)=>(totals[b]||0)-(totals[a]||0)).map(cat => {
-        const used=totals[cat]||0, budget=num(state.categoryBudgets[cat]), pct=budget>0?used/budget*100:(used>0?100:0);
-        return `<div class="bar-row"><div class="bar-row-head"><span>${esc(cat)}</span><strong>${money(used)} / ${money(budget)}</strong></div><div class="progress-track"><div class="progress-fill${pct>=100?' danger':pct>=80?' warn':''}" style="width:${Math.min(100,pct)}%"></div></div></div>`;
-      }).join('');
-    }
-
-    function renderTrend() {
-      const points=[];
-      for(let i=-5;i<=0;i++) { const d=new Date(selectedYear(),selectedMonthIndex()+i,1); const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; points.push({label:MONTHS[d.getMonth()].slice(0,3),value:variableFor(key)}); }
-      const max=Math.max(1,...points.map(p=>p.value));
-      $('trendChart').innerHTML=points.map(p=>`<div class="trend-item"><div class="trend-bar-wrap"><div class="trend-bar" title="${money(p.value)}" style="height:${Math.max(2,p.value/max*100)}%"></div></div><span>${p.label}</span></div>`).join('');
-    }
-
-    function renderForecast() {
-      const year=selectedYear(), currentYear=today.getFullYear(), currentMonth=today.getMonth();
-      const income = fixedIncomeTotal()*12 + state.extraIncomes.filter(x=>Number(x.date?.slice(0,4))===year).reduce((s,x)=>s+num(x.amount),0);
-      let variableProjection=0;
-      for(let m=0;m<12;m++) {
-        const key=`${year}-${String(m+1).padStart(2,'0')}`;
-        const hasActual=year<currentYear || (year===currentYear && m<=currentMonth) || expensesFor(key).length>0;
-        variableProjection += hasActual ? variableFor(key) : categoryBudgetTotal();
       }
-      const forecast=income-monthlyFixedTotal()*12-annualTotal()-variableProjection;
-      $('forecastValue').textContent=money(forecast);
-      $('forecastValue').className=forecast>=0?'amount-positive':'amount-negative';
-      $('forecastText').textContent=`Prognostizierter Restbetrag für ${year}. Zukünftige Monate werden mit deinen Kategorie-Budgets berechnet.`;
-    }
 
-    function renderGoals() {
-      if (!state.savingGoals.length) { $('goalList').innerHTML='<div class="empty">Noch kein Sparziel vorhanden.</div>'; return; }
-      $('goalList').innerHTML=state.savingGoals.map(g=>{const pct=num(g.target)>0?num(g.current)/num(g.target)*100:0;return `<div class="goal"><div class="goal-head"><strong>${esc(g.name)}</strong><span>${money(g.current)} / ${money(g.target)}</span></div><div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,pct)}%"></div></div><div class="progress-meta"><span>${Math.round(pct)} % erreicht</span><span>${g.deadline?`Ziel: ${formatDate(g.deadline)}`:'Ohne Termin'}</span></div><div class="goal-actions"><button class="btn ghost small" data-action="goal-deposit" data-id="${g.id}">Einzahlen</button><button class="mini-action" data-action="edit-goal" data-id="${g.id}">✎</button><button class="mini-action delete" data-action="delete-goal" data-id="${g.id}">×</button></div></div>`}).join('');
-    }
+      let state = loadState();
+      let activeView = "dashboard";
+      let incomeMode = "fixed";
+      let fixedMode = "monthly";
 
-    function renderIncome() {
-      document.querySelectorAll('[data-income-mode]').forEach(b=>b.classList.toggle('active',b.dataset.incomeMode===incomeMode));
-      const q=$('incomeSearch').value.trim().toLowerCase();
-      const source=incomeMode==='fixed'?state.fixedIncomes:extraIncomeFor(state.selectedMonth);
-      const items=source.filter(x=>`${x.description} ${x.note||''}`.toLowerCase().includes(q));
-      $('incomeTotalPill').textContent=money(incomeMode==='fixed'?fixedIncomeTotal():sum(extraIncomeFor(state.selectedMonth)));
-      $('incomeList').innerHTML=items.length?items.sort(sortByDateDesc).map(x=>entryHtml(x,'income')).join(''):'<div class="empty">Noch keine Einnahme vorhanden.</div>';
-    }
-
-    function renderFixed() {
-      document.querySelectorAll('[data-fixed-mode]').forEach(b=>b.classList.toggle('active',b.dataset.fixedMode===fixedMode));
-      const source=fixedMode==='monthly'?state.monthlyFixedCosts:state.annualFixedCosts;
-      fillCategoryFilter('fixedFilter',FIXED_CATEGORIES,source);
-      const q=$('fixedSearch').value.trim().toLowerCase(), filter=$('fixedFilter').value;
-      const items=source.filter(x=>(!filter||x.category===filter)&&`${x.description} ${x.category} ${x.note||''}`.toLowerCase().includes(q));
-      $('fixedTotalPill').textContent=fixedMode==='monthly'?money(monthlyFixedTotal()):`${money(annualReserve())} / Mt.`;
-      $('fixedList').innerHTML=items.length?items.map(x=>entryHtml(x,'fixed')).join(''):'<div class="empty">Noch keine Fixkosten vorhanden.</div>';
-    }
-
-    function renderExpenses() {
-      const source=expensesFor(state.selectedMonth);
-      fillCategoryFilter('expenseFilter',DEFAULT_CATEGORIES,source);
-      const q=$('expenseSearch').value.trim().toLowerCase(), filter=$('expenseFilter').value;
-      const items=source.filter(x=>(!filter||x.category===filter)&&`${x.description} ${x.category} ${x.note||''}`.toLowerCase().includes(q));
-      $('expenseTotalPill').textContent=money(sum(source));
-      $('expenseList').innerHTML=items.length?items.sort(sortByDateDesc).map(x=>entryHtml(x,'expense')).join(''):'<div class="empty">In diesem Monat gibt es noch keine Ausgaben.</div>';
-    }
-
-    function fillCategoryFilter(id,defaults,source) {
-      const el=$(id), previous=el.value;
-      const cats=[...new Set([...defaults,...source.map(x=>x.category).filter(Boolean)])].sort();
-      el.innerHTML='<option value="">Alle Kategorien</option>'+cats.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
-      if(cats.includes(previous)) el.value=previous;
-    }
-
-    function sortByDateDesc(a,b) { return String(b.date||'').localeCompare(String(a.date||'')); }
-
-    function entryHtml(item,type) {
-      const isIncome=type==='income', isFixed=type==='fixed';
-      const annual=isFixed&&fixedMode==='annual';
-      const amount=annual?item.annualAmount:item.amount;
-      const badge=annual?'annual':isFixed?'monthly':isIncome?'income':'expense';
-      const badgeText=annual?'Jährlich':isFixed?'Monatlich':isIncome?(incomeMode==='fixed'?'Fix':'Zusatz'):'Ausgabe';
-      const details=[];
-      if(item.date) details.push(formatDate(item.date));
-      if(item.category) details.push(esc(item.category));
-      if(annual) details.push(`Fällig: ${MONTHS[(Number(item.dueMonth)||1)-1]}`);
-      if(item.note) details.push(esc(item.note));
-      const paid=annual&&Array.isArray(item.paidYears)&&item.paidYears.includes(selectedYear());
-      return `<div class="entry"><div class="entry-main"><div class="entry-title"><strong>${esc(item.description)}</strong><span class="badge ${badge}">${badgeText}</span>${paid?'<span class="badge income">Bezahlt</span>':''}</div><div class="entry-meta">${details.join(' · ')||'Keine Zusatzangaben'}</div></div><div><div class="entry-amount ${isIncome?'amount-positive':annual?'':'amount-negative'}">${money(amount)}</div>${annual?`<div class="muted small">${money(num(amount)/12)} / Mt.</div>`:''}<div class="entry-actions">${annual?`<button class="mini-action" title="Bezahlt umschalten" data-action="toggle-paid" data-id="${item.id}">✓</button>`:''}${!isFixed?`<button class="mini-action" title="Duplizieren" data-action="duplicate-${type}" data-id="${item.id}">⧉</button>`:''}<button class="mini-action" title="Bearbeiten" data-action="edit-${type}" data-id="${item.id}">✎</button><button class="mini-action delete" title="Löschen" data-action="delete-${type}" data-id="${item.id}">×</button></div></div></div>`;
-    }
-
-    function formatDate(value) {
-      if(!value) return '';
-      const [y,m,d]=value.split('-').map(Number); return new Intl.DateTimeFormat('de-CH').format(new Date(y,m-1,d));
-    }
-
-    function openModal(html) { $('modalContent').innerHTML=html; $('modalBackdrop').classList.remove('hidden'); document.body.style.overflow='hidden'; }
-    function closeModal() { $('modalBackdrop').classList.add('hidden'); $('modalContent').innerHTML=''; document.body.style.overflow=''; editing=null; }
-    function showToast(message) { const t=$('toast'); t.textContent=message; t.classList.add('show'); clearTimeout(showToast.timer); showToast.timer=setTimeout(()=>t.classList.remove('show'),2200); }
-
-    function openQuickAdd() {
-      if(activeView==='income') return openIncomeForm();
-      if(activeView==='fixed') return openFixedForm();
-      if(activeView==='expenses') return openExpenseForm();
-      openModal(`<div class="modal-header"><h2>Was möchtest du erfassen?</h2><button class="close-button" data-close>×</button></div><div class="choice-grid"><button class="choice" data-action="quick-income"><span style="font-size:30px;color:var(--income)">＋</span><b>Einnahme</b></button><button class="choice" data-action="quick-expense"><span style="font-size:30px;color:var(--expense)">−</span><b>Ausgabe</b></button></div>`);
-    }
-
-    function openIncomeForm(item=null) {
-      const mode=item?.kind || incomeMode;
-      openModal(`<div class="modal-header"><h2>${item?'Einnahme bearbeiten':'Neue Einnahme'}</h2><button class="close-button" data-close>×</button></div><form id="incomeForm" class="form-grid"><label>Art<select name="kind"><option value="fixed" ${mode==='fixed'?'selected':''}>Fixeinnahme – jeden Monat</option><option value="extra" ${mode==='extra'?'selected':''}>Zusatzeinnahme – nur dieser Monat</option></select></label><label>Beschreibung<input class="input" name="description" value="${esc(item?.description||'')}" placeholder="z. B. Nettolohn" required></label><div class="form-row"><label>Betrag in CHF<input class="input" name="amount" type="number" min="0" step="0.05" value="${item?.amount??''}" required></label><label>Datum <span>nur bei Zusatzeinnahmen</span><input class="input" name="date" type="date" value="${item?.date||currentDateForSelectedMonth()}"></label></div><label>Notiz <span>optional</span><textarea name="note" rows="2">${esc(item?.note||'')}</textarea></label><button class="btn" type="submit">Speichern</button></form>`);
-      $('incomeForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const kind=fd.get('kind');const obj={id:item?.id||uid(),kind,description:fd.get('description').trim(),amount:num(fd.get('amount')),date:kind==='extra'?fd.get('date'):'',note:fd.get('note').trim()};if(item) removeItem('income',item.id,false);(kind==='fixed'?state.fixedIncomes:state.extraIncomes).push(obj);incomeMode=kind;saveState('Einnahme gespeichert');closeModal();renderAll();});
-    }
-
-    function categoryOptions(list,current='') { const values=[...new Set([...list,current].filter(Boolean))]; return values.map(c=>`<option value="${esc(c)}" ${c===current?'selected':''}>${esc(c)}</option>`).join(''); }
-
-    function openFixedForm(item=null) {
-      const mode=item?.kind || fixedMode;
-      openModal(`<div class="modal-header"><h2>${item?'Fixkosten bearbeiten':'Neue Fixkosten'}</h2><button class="close-button" data-close>×</button></div><form id="fixedForm" class="form-grid"><label>Art<select name="kind" id="fixedKind"><option value="monthly" ${mode==='monthly'?'selected':''}>Monatliche Fixkosten</option><option value="annual" ${mode==='annual'?'selected':''}>Jährliche Fixkosten</option></select></label><label>Beschreibung<input class="input" name="description" value="${esc(item?.description||'')}" placeholder="z. B. Miete oder Autoversicherung" required></label><label>Kategorie<select name="category">${categoryOptions(FIXED_CATEGORIES,item?.category||'Wohnen')}</select></label><label id="monthlyAmountLabel">Betrag pro Monat in CHF<input class="input" name="amount" type="number" min="0" step="0.05" value="${item?.amount??''}"></label><label id="annualAmountLabel">Betrag pro Jahr in CHF<input class="input" name="annualAmount" type="number" min="0" step="0.05" value="${item?.annualAmount??''}"></label><label id="dueMonthLabel">Fällig im Monat<select name="dueMonth">${MONTHS.map((m,i)=>`<option value="${i+1}" ${Number(item?.dueMonth||1)===i+1?'selected':''}>${m}</option>`).join('')}</select></label><label>Notiz <span>optional</span><textarea name="note" rows="2">${esc(item?.note||'')}</textarea></label><button class="btn" type="submit">Speichern</button></form>`);
-      const updateFields=()=>{const annual=$('fixedKind').value==='annual';$('monthlyAmountLabel').classList.toggle('hidden',annual);$('annualAmountLabel').classList.toggle('hidden',!annual);$('dueMonthLabel').classList.toggle('hidden',!annual);};$('fixedKind').addEventListener('change',updateFields);updateFields();
-      $('fixedForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget),kind=fd.get('kind');const obj={id:item?.id||uid(),kind,description:fd.get('description').trim(),category:fd.get('category'),note:fd.get('note').trim(),amount:kind==='monthly'?num(fd.get('amount')):undefined,annualAmount:kind==='annual'?num(fd.get('annualAmount')):undefined,dueMonth:kind==='annual'?Number(fd.get('dueMonth')):undefined,paidYears:item?.paidYears||[]};if(item) removeItem('fixed',item.id,false);(kind==='monthly'?state.monthlyFixedCosts:state.annualFixedCosts).push(obj);fixedMode=kind;saveState('Fixkosten gespeichert');closeModal();renderAll();});
-    }
-
-    function openExpenseForm(item=null) {
-      openModal(`<div class="modal-header"><h2>${item?'Ausgabe bearbeiten':'Neue Ausgabe'}</h2><button class="close-button" data-close>×</button></div><form id="expenseForm" class="form-grid"><label>Beschreibung<input class="input" name="description" value="${esc(item?.description||'')}" placeholder="z. B. Wocheneinkauf" required></label><div class="form-row"><label>Betrag in CHF<input class="input" name="amount" type="number" min="0" step="0.05" value="${item?.amount??''}" required></label><label>Datum<input class="input" name="date" type="date" value="${item?.date||currentDateForSelectedMonth()}" required></label></div><label>Kategorie<select name="category">${categoryOptions(DEFAULT_CATEGORIES,item?.category||state.settings.lastExpenseCategory)}</select></label><label>Notiz <span>optional</span><textarea name="note" rows="2">${esc(item?.note||'')}</textarea></label><button class="btn" type="submit">Speichern</button></form>`);
-      $('expenseForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const obj={id:item?.id||uid(),description:fd.get('description').trim(),amount:num(fd.get('amount')),date:fd.get('date'),category:fd.get('category'),note:fd.get('note').trim()};if(item) removeItem('expense',item.id,false);state.expenses.push(obj);state.settings.lastExpenseCategory=obj.category;state.selectedMonth=monthKeyFromDate(obj.date);saveState('Ausgabe gespeichert');closeModal();renderAll();});
-    }
-
-    function openGoalForm(item=null) {
-      openModal(`<div class="modal-header"><h2>${item?'Sparziel bearbeiten':'Neues Sparziel'}</h2><button class="close-button" data-close>×</button></div><form id="goalForm" class="form-grid"><label>Name<input class="input" name="name" value="${esc(item?.name||'')}" placeholder="z. B. Ferien" required></label><div class="form-row"><label>Zielbetrag in CHF<input class="input" name="target" type="number" min="0" step="0.05" value="${item?.target??''}" required></label><label>Bereits gespart<input class="input" name="current" type="number" min="0" step="0.05" value="${item?.current??0}" required></label></div><label>Zieldatum <span>optional</span><input class="input" name="deadline" type="date" value="${item?.deadline||''}"></label><button class="btn" type="submit">Speichern</button></form>`);
-      $('goalForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const obj={id:item?.id||uid(),name:fd.get('name').trim(),target:num(fd.get('target')),current:num(fd.get('current')),deadline:fd.get('deadline')};if(item) state.savingGoals=state.savingGoals.filter(x=>x.id!==item.id);state.savingGoals.push(obj);saveState('Sparziel gespeichert');closeModal();renderAll();});
-    }
-
-    function openGoalDeposit(id) {
-      const goal=state.savingGoals.find(x=>x.id===id); if(!goal)return;
-      openModal(`<div class="modal-header"><h2>In ${esc(goal.name)} einzahlen</h2><button class="close-button" data-close>×</button></div><form id="depositForm" class="form-grid"><label>Betrag in CHF<input class="input" name="amount" type="number" min="0" step="0.05" required autofocus></label><button class="btn" type="submit">Hinzufügen</button></form>`);
-      $('depositForm').addEventListener('submit',e=>{e.preventDefault();goal.current=num(goal.current)+num(new FormData(e.currentTarget).get('amount'));saveState('Sparziel aktualisiert');closeModal();renderAll();});
-    }
-
-    function removeItem(type,id,confirmFirst=true) {
-      if(confirmFirst && !confirm('Diesen Eintrag wirklich löschen?')) return false;
-      if(type==='income') { state.fixedIncomes=state.fixedIncomes.filter(x=>x.id!==id); state.extraIncomes=state.extraIncomes.filter(x=>x.id!==id); }
-      if(type==='fixed') { state.monthlyFixedCosts=state.monthlyFixedCosts.filter(x=>x.id!==id); state.annualFixedCosts=state.annualFixedCosts.filter(x=>x.id!==id); }
-      if(type==='expense') state.expenses=state.expenses.filter(x=>x.id!==id);
-      if(type==='goal') state.savingGoals=state.savingGoals.filter(x=>x.id!==id);
-      if(confirmFirst){saveState('Eintrag gelöscht');renderAll();} return true;
-    }
-
-    function duplicateItem(type,id) {
-      const source=type==='income'?state.extraIncomes:state.expenses;
-      const item=source.find(x=>x.id===id); if(!item)return;
-      source.push({...item,id:uid(),date:currentDateForSelectedMonth()}); saveState('Eintrag dupliziert'); renderAll();
-    }
-
-    function openSettings() {
-      openModal(`<div class="modal-header"><h2>Einstellungen</h2><button class="close-button" data-close>×</button></div>
-        <div class="settings-section"><h3>Kategorie-Budgets pro Monat</h3><form id="budgetForm" class="form-grid">${Object.entries(state.categoryBudgets).map(([cat,val])=>`<label>${esc(cat)}<input class="input" name="${esc(cat)}" type="number" min="0" step="0.05" value="${val}"></label>`).join('')}<button class="btn" type="submit">Budgets speichern</button></form></div>
-        <div class="settings-section"><h3>Daten sichern</h3><p class="muted small">Deine Daten bleiben auf diesem Gerät. Erstelle regelmässig eine Sicherung.</p><div class="settings-actions"><button class="btn ghost" id="exportBackup">Backup herunterladen</button><label class="btn secondary" style="display:block;text-align:center">Backup einlesen<input class="file-input" id="importBackup" type="file" accept="application/json"></label><button class="btn ghost" id="exportCsv">CSV für Excel</button><button class="btn secondary" id="exportPrint">Jahresübersicht drucken</button></div></div>
-        <div class="settings-section"><h3>PIN-Schutz</h3><p class="muted small">Der PIN schützt die App beim nächsten Öffnen auf diesem Gerät.</p><button class="btn ${state.settings.pinHash?'danger':'ghost'} btn-block" id="pinButton">${state.settings.pinHash?'PIN-Schutz entfernen':'PIN-Schutz einrichten'}</button></div>`);
-      $('budgetForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);Object.keys(state.categoryBudgets).forEach(c=>state.categoryBudgets[c]=num(fd.get(c)));saveState('Kategorie-Budgets gespeichert');closeModal();renderAll();});
-      $('exportBackup').onclick=exportBackup; $('importBackup').onchange=importBackup; $('exportCsv').onclick=exportCsv; $('exportPrint').onclick=printYearOverview; $('pinButton').onclick=()=>state.settings.pinHash?removePin():setupPin();
-    }
-
-    function download(name,content,type) { const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000); }
-    function exportBackup() { download(`Budgetplaner-Backup-${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(state,null,2),'application/json');showToast('Backup erstellt'); }
-    function importBackup(event) { const file=event.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.expenses)||!Array.isArray(data.fixedIncomes))throw new Error();if(!confirm('Aktuelle Daten durch dieses Backup ersetzen?'))return;localStorage.setItem(STORAGE_KEY,JSON.stringify(data));state=loadState();closeModal();renderAll();showToast('Backup wiederhergestellt');}catch{alert('Die Datei ist kein gültiges Budgetplaner-Backup.');}};reader.readAsText(file); }
-    function csvCell(v) { return `"${String(v??'').replace(/"/g,'""')}"`; }
-    function exportCsv() {
-      const rows=[['Typ','Datum/Monat','Beschreibung','Kategorie','Betrag CHF','Notiz']];
-      state.fixedIncomes.forEach(x=>rows.push(['Fixeinnahme','Jeden Monat',x.description,'Einnahmen',x.amount,x.note]));
-      state.extraIncomes.forEach(x=>rows.push(['Zusatzeinnahme',x.date,x.description,'Einnahmen',x.amount,x.note]));
-      state.monthlyFixedCosts.forEach(x=>rows.push(['Fixkosten monatlich','Jeden Monat',x.description,x.category,x.amount,x.note]));
-      state.annualFixedCosts.forEach(x=>rows.push(['Fixkosten jährlich',MONTHS[(x.dueMonth||1)-1],x.description,x.category,x.annualAmount,x.note]));
-      state.expenses.forEach(x=>rows.push(['Variable Ausgabe',x.date,x.description,x.category,x.amount,x.note]));
-      download(`Budgetplaner-${selectedYear()}.csv`,'\ufeff'+rows.map(r=>r.map(csvCell).join(';')).join('\n'),'text/csv;charset=utf-8');showToast('CSV erstellt');
-    }
-
-    function printYearOverview() {
-      const year=selectedYear();
-      const rows=[];
-      for(let month=0;month<12;month++) {
-        const key=`${year}-${String(month+1).padStart(2,'0')}`;
-        const income=incomeFor(key), monthly=monthlyFixedTotal(), reserve=annualReserve(), variable=variableFor(key);
-        rows.push({month:MONTHS[month],income,monthly,reserve,variable,remaining:income-monthly-reserve-variable});
+      function $(id) {
+        return document.getElementById(id);
       }
-      const total=(field)=>rows.reduce((sum,row)=>sum+row[field],0);
-      $('printReport').innerHTML=`<h1>Budget-Jahresübersicht ${year}</h1><p>Erstellt am ${new Intl.DateTimeFormat('de-CH').format(new Date())}</p><table><thead><tr><th>Monat</th><th>Einnahmen</th><th>Fixkosten</th><th>Rücklage Jahreskosten</th><th>Variable Ausgaben</th><th>Restbetrag</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.month}</td><td>${money(r.income)}</td><td>${money(r.monthly)}</td><td>${money(r.reserve)}</td><td>${money(r.variable)}</td><td>${money(r.remaining)}</td></tr>`).join('')}</tbody><tfoot><tr><td>Gesamt</td><td>${money(total('income'))}</td><td>${money(total('monthly'))}</td><td>${money(total('reserve'))}</td><td>${money(total('variable'))}</td><td>${money(total('remaining'))}</td></tr></tfoot></table>`;
-      closeModal(); setTimeout(()=>window.print(),50);
-    }
 
-    async function hashPin(pin) { const data=new TextEncoder().encode(pin);const digest=await crypto.subtle.digest('SHA-256',data);return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
-    function setupPin() { openModal(`<div class="modal-header"><h2>PIN einrichten</h2><button class="close-button" data-close>×</button></div><form id="pinForm" class="form-grid"><label>Neue PIN<input class="input" name="pin" type="password" inputmode="numeric" minlength="4" maxlength="8" pattern="[0-9]{4,8}" required></label><label>PIN wiederholen<input class="input" name="repeat" type="password" inputmode="numeric" minlength="4" maxlength="8" pattern="[0-9]{4,8}" required></label><button class="btn" type="submit">PIN speichern</button></form>`);$('pinForm').addEventListener('submit',async e=>{e.preventDefault();const fd=new FormData(e.currentTarget);if(fd.get('pin')!==fd.get('repeat'))return alert('Die PINs stimmen nicht überein.');state.settings.pinHash=await hashPin(fd.get('pin'));saveState('PIN-Schutz aktiviert');closeModal();}); }
-    function removePin() { if(confirm('PIN-Schutz wirklich entfernen?')){state.settings.pinHash='';saveState('PIN-Schutz entfernt');closeModal();} }
-    async function unlock(pin) { if(await hashPin(pin)===state.settings.pinHash){$('lockScreen').classList.add('hidden');$('unlockPin').value='';$('unlockError').textContent='';}else $('unlockError').textContent='PIN nicht korrekt.'; }
+      function createId() {
+        if (crypto.randomUUID) {
+          return crypto.randomUUID();
+        }
 
-    function handleAction(action,id) {
-      if(action==='add-income'||action==='quick-income'){closeModal();openIncomeForm();}
-      else if(action==='add-fixed')openFixedForm();
-      else if(action==='add-expense'||action==='quick-expense'){closeModal();openExpenseForm();}
-      else if(action==='add-goal')openGoalForm();
-      else if(action==='goal-deposit')openGoalDeposit(id);
-      else if(action==='edit-goal')openGoalForm(state.savingGoals.find(x=>x.id===id));
-      else if(action==='delete-goal')removeItem('goal',id);
-      else if(action==='edit-income'){const item=[...state.fixedIncomes,...state.extraIncomes].find(x=>x.id===id);openIncomeForm(item);}
-      else if(action==='delete-income')removeItem('income',id);
-      else if(action==='duplicate-income')duplicateItem('income',id);
-      else if(action==='edit-fixed'){const item=[...state.monthlyFixedCosts,...state.annualFixedCosts].find(x=>x.id===id);openFixedForm(item);}
-      else if(action==='delete-fixed')removeItem('fixed',id);
-      else if(action==='edit-expense')openExpenseForm(state.expenses.find(x=>x.id===id));
-      else if(action==='delete-expense')removeItem('expense',id);
-      else if(action==='duplicate-expense')duplicateItem('expense',id);
-      else if(action==='toggle-paid'){const item=state.annualFixedCosts.find(x=>x.id===id);if(item){item.paidYears=item.paidYears||[];const y=selectedYear();item.paidYears=item.paidYears.includes(y)?item.paidYears.filter(v=>v!==y):[...item.paidYears,y];saveState('Zahlungsstatus aktualisiert');renderAll();}}
-    }
+        return (
+          Date.now() +
+          "-" +
+          Math.random().toString(16).slice(2)
+        );
+      }
 
-    document.addEventListener('click',e=>{
-      const nav=e.target.closest('[data-view]');if(nav)return switchView(nav.dataset.view);
-      const close=e.target.closest('[data-close]');if(close)return closeModal();
-      const action=e.target.closest('[data-action]');if(action)return handleAction(action.dataset.action,action.dataset.id);
-      const inc=e.target.closest('[data-income-mode]');if(inc){incomeMode=inc.dataset.incomeMode;renderIncome();}
-      const fix=e.target.closest('[data-fixed-mode]');if(fix){fixedMode=fix.dataset.fixedMode;renderFixed();}
-      if(e.target===$('modalBackdrop'))closeModal();
-    });
-    $('previousMonth').onclick=()=>changeMonth(-1); $('nextMonth').onclick=()=>changeMonth(1); $('periodLabel').onclick=showMonthPicker;
-    $('settingsButton').onclick=openSettings; $('fab').onclick=openQuickAdd;
-    $('incomeSearch').oninput=renderIncome; $('fixedSearch').oninput=renderFixed; $('fixedFilter').onchange=renderFixed; $('expenseSearch').oninput=renderExpenses; $('expenseFilter').onchange=renderExpenses;
-    $('unlockForm').addEventListener('submit',e=>{e.preventDefault();unlock($('unlockPin').value);});
+      function number(value) {
+        return Math.max(
+          0,
+          Number(String(value).replace(",", ".")) || 0
+        );
+      }
 
-    if(state.settings.pinHash)$('lockScreen').classList.remove('hidden');
-    renderAll();
-    if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-  })();
-  </script>
-</body>
-</html>
+      function money(value) {
+        return new Intl.NumberFormat("de-CH", {
+          style: "currency",
+          currency: "CHF",
+          minimumFractionDigits: 2
+        }).format(Number(value) || 0);
+      }
+
+      function escapeHtml(value = "") {
+        return String(value).replace(
+          /[&<>'"]/g,
+          character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "'": "&#39;",
+            "\"": "&quot;"
+          })[character]
+        );
+      }
+
+      function loadState() {
+        try {
+          const saved = JSON.parse(
+            localStorage.getItem(STORAGE_KEY)
+          );
+
+          if (!saved || typeof saved !== "object") {
+            return createDefaultState();
+          }
+
+          const defaults = createDefaultState();
+
+          return {
+            ...defaults,
+            ...saved,
+            selectedMonth: currentMonthKey(),
+            fixedIncomes: Array.isArray(saved.fixedIncomes)
+              ? saved.fixedIncomes
+              : [],
+            extraIncomes: Array.isArray(saved.extraIncomes)
+              ? saved.extraIncomes
+              : [],
+            monthlyFixedCosts:
+              Array.isArray(saved.monthlyFixedCosts)
+                ? saved.monthlyFixedCosts
+                : [],
+            annualFixedCosts:
+              Array.isArray(saved.annualFixedCosts)
+                ? saved.annualFixedCosts
+                : [],
+            expenses: Array.isArray(saved.expenses)
+              ? saved.expenses
+              : [],
+            savingGoals: Array.isArray(saved.savingGoals)
+              ? saved.savingGoals
+              : [],
+            categoryBudgets: {
+              ...defaults.categoryBudgets,
+              ...(saved.categoryBudgets || {})
+            },
+            settings: {
+              ...defaults.settings,
+              ...(saved.settings || {})
+            }
+          };
+        } catch {
+          return createDefaultState();
+        }
+      }
+
+      function saveState(message = "") {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(state)
+        );
+
+        if (message) {
+          showToast(message);
+        }
+      }
+
+      function selectedYear() {
+        return Number(state.selectedMonth.slice(0, 4));
+      }
+
+      function selectedMonthIndex() {
+        return Number(state.selectedMonth.slice(5, 7)) - 1;
+      }
+
+      function monthKeyFromDate(date) {
+        return String(date || "").slice(0, 7);
+      }
+
+      function dateForSelectedMonth() {
+        if (state.selectedMonth === currentMonthKey()) {
+          return (
+            state.selectedMonth +
+            "-" +
+            String(today.getDate()).padStart(2, "0")
+          );
+        }
+
+        return state.selectedMonth + "-01";
+      }
+
+      function formatDate(value) {
+        if (!value) {
+          return "";
+        }
+
+        const parts = value.split("-").map(Number);
+
+        return new Intl.DateTimeFormat("de-CH").format(
+          new Date(parts[0], parts[1] - 1, parts[2])
+        );
+      }
+
+      function sum(items, field = "amount") {
+        return items.reduce(
+          (total, item) => total + number(item[field]),
+          0
+        );
+      }
+
+      function fixedIncomeTotal() {
+        return sum(state.fixedIncomes);
+      }
+
+      function monthlyFixedTotal() {
+        return sum(state.monthlyFixedCosts);
+      }
+
+      function annualFixedTotal() {
+        return sum(
+          state.annualFixedCosts,
+          "annualAmount"
+        );
+      }
+
+      function annualReserve() {
+        return annualFixedTotal() / 12;
+      }
+
+      function extraIncomesFor(month) {
+        return state.extraIncomes.filter(
+          item => monthKeyFromDate(item.date) === month
+        );
+      }
+
+      function expensesFor(month) {
+        return state.expenses.filter(
+          item => monthKeyFromDate(item.date) === month
+        );
+      }
+
+      function incomeFor(month) {
+        return (
+          fixedIncomeTotal() +
+          sum(extraIncomesFor(month))
+        );
+      }
+
+      function variableExpensesFor(month) {
+        return sum(expensesFor(month));
+      }
+
+      function categoryBudgetTotal() {
+        return Object.values(state.categoryBudgets)
+          .reduce(
+            (total, value) => total + number(value),
+            0
+          );
+      }
+
+      function remainingFor(month) {
+        return (
+          incomeFor(month) -
+          monthlyFixedTotal() -
+          annualReserve() -
+          variableExpensesFor(month)
+        );
+      }
+
+      function showToast(message) {
+        const toast = $("toast");
+
+        toast.textContent = message;
+        toast.classList.add("show");
+
+        clearTimeout(showToast.timer);
+
+        showToast.timer = setTimeout(() => {
+          toast.classList.remove("show");
+        }, 2200);
+      }
+
+      function openModal(content) {
+        $("modalContent").innerHTML = content;
+        $("modalBackdrop").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal() {
+        $("modalBackdrop").classList.add("hidden");
+        $("modalContent").innerHTML = "";
+        document.body.style.overflow = "";
+      }
+
+      function categoryOptions(categories, current = "") {
+        const values = [
+          ...new Set(
+            [...categories, current].filter(Boolean)
+          )
+        ];
+
+        return values.map(category => `
+          <option
+            value="${escapeHtml(category)}"
+            ${category === current ? "selected" : ""}
+          >
+            ${escapeHtml(category)}
+          </option>
+        `).join("");
+      }
+
+      function changeMonth(change) {
+        const date = new Date(
+          selectedYear(),
+          selectedMonthIndex() + change,
+          1
+        );
+
+        state.selectedMonth =
+          date.getFullYear() +
+          "-" +
+          String(date.getMonth() + 1).padStart(2, "0");
+
+        saveState();
+        renderAll();
+      }
+
+      function openMonthSelection() {
+        openModal(`
+          <div class="modal-header">
+            <h2>Zeitraum wählen</h2>
+            <button class="close-button" data-close>×</button>
+          </div>
+
+          <form class="form-grid" id="monthForm">
+            <label>
+              Monat
+
+              <select name="month">
+                ${months.map((month, index) => `
+                  <option
+                    value="${index + 1}"
+                    ${
+                      index === selectedMonthIndex()
+                        ? "selected"
+                        : ""
+                    }
+                  >
+                    ${month}
+                  </option>
+                `).join("")}
+              </select>
+            </label>
+
+            <label>
+              Jahr
+
+              <input
+                class="input"
+                name="year"
+                type="number"
+                min="2020"
+                max="2100"
+                value="${selectedYear()}"
+                required
+              >
+            </label>
+
+            <button class="button" type="submit">
+              Übernehmen
+            </button>
+          </form>
+        `);
+
+        $("monthForm").addEventListener(
+          "submit",
+          event => {
+            event.preventDefault();
+
+            const data = new FormData(event.currentTarget);
+
+            state.selectedMonth =
+              data.get("year") +
+              "-" +
+              String(data.get("month")).padStart(2, "0");
+
+            saveState();
+            closeModal();
+            renderAll();
+          }
+        );
+      }
+
+      function switchView(view) {
+        activeView = view;
+
+        document.querySelectorAll(".view")
+          .forEach(element => {
+            element.classList.toggle(
+              "active",
+              element.id === "view-" + view
+            );
+          });
+
+        document.querySelectorAll(".nav-button")
+          .forEach(button => {
+            button.classList.toggle(
+              "active",
+              button.dataset.view === view
+            );
+          });
+
+        renderAll();
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }
+
+      function renderAll() {
+        $("monthLabel").textContent =
+          months[selectedMonthIndex()] +
+          " " +
+          selectedYear();
+
+        renderDashboard();
+        renderIncomeList();
+        renderFixedList();
+        renderExpenseList();
+        renderYearTable();
+      }
+
+      function renderDashboard() {
+        const income = incomeFor(state.selectedMonth);
+        const monthly = monthlyFixedTotal();
+        const reserve = annualReserve();
+        const expenses =
+          variableExpensesFor(state.selectedMonth);
+        const remaining =
+          income - monthly - reserve - expenses;
+
+        $("remainingValue").textContent = money(remaining);
+
+        $("remainingLabel").textContent =
+          remaining >= 0
+            ? "Im " +
+              months[selectedMonthIndex()] +
+              " noch verfügbar"
+            : "Budget im " +
+              months[selectedMonthIndex()] +
+              " überschritten";
+
+        $("remainingHero").classList.toggle(
+          "negative",
+          remaining < 0
+        );
+
+        const previousDate = new Date
