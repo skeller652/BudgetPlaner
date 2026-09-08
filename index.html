@@ -2767,13 +2767,12 @@ Kommentar senden
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-storage-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-functions-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-check-compat.js"></script>
 
 <!-- QR-Code wird vollständig lokal im Browser erzeugt. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 
-<script>
+<script type="module">
 
 /* FIREBASE */
 
@@ -2801,13 +2800,29 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-/* SECURITY V4: Firebase App Check mit reCAPTCHA Enterprise. */
+/* SECURITY V4.1: Firebase App Check modular auf derselben Firebase-App. */
 const APP_CHECK_ENTERPRISE_KEY = "6Ldra7AtAAAAAKCOEsXNyVlcbZvksQyr_I2q0lrp";
-const appCheck = firebase.appCheck();
-appCheck.activate(
-  new firebase.appCheck.ReCaptchaEnterpriseProvider(APP_CHECK_ENTERPRISE_KEY),
-  true
-);
+const {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+  getToken: getAppCheckToken
+} = await import("https://www.gstatic.com/firebasejs/10.13.2/firebase-app-check.js");
+
+const firebaseDelegateApp = firebase.app()._delegate;
+if(!firebaseDelegateApp){
+  throw new Error("Firebase App Check konnte die gemeinsame Firebase-App nicht finden.");
+}
+
+const appCheck = initializeAppCheck(firebaseDelegateApp,{
+  provider:new ReCaptchaEnterpriseProvider(APP_CHECK_ENTERPRISE_KEY),
+  isTokenAutoRefreshEnabled:true
+});
+
+/* Nur für unseren Funktionstest in der Safari-Konsole. */
+window.fcwAppCheck = appCheck;
+window.fcwGetAppCheckToken = async function(forceRefresh=true){
+  return getAppCheckToken(appCheck,forceRefresh);
+};
 
 const db = firebase.firestore();
 const auth = firebase.auth();
@@ -2842,7 +2857,7 @@ const VAPID_KEY =
   "BDh4fUsnFpKsO0AH39A949bg6xnzdjdUpTSXE6XEgAaqjvHH2pbdEkAWGxK7GnWHxSHFLRfHkrVu0hgA75BoON0";
 
 const APP_URL = "https://skeller652.github.io/FC-W-ngi-1967/";
-const APP_VERSION = "2026.09.03-4.0-security";
+const APP_VERSION = "2026.09.08-4.1-security";
 
 
 let newsData = [];
@@ -7591,6 +7606,112 @@ window.addEventListener(
   }
 );
 
+
+
+/* Modul-Funktionen für bestehende HTML-onclick/onchange Handler freigeben. */
+Object.assign(window,{
+  adminRow,
+  adminWorkspaceGroupForCard,
+  cancelAdminMfaLogin,
+  cancelTotpEnrollment,
+  checkAdminEmailVerification,
+  closeModal,
+  commentCountFor,
+  commentTargetLabel,
+  dateInputValue,
+  deleteComment,
+  deleteItem,
+  deleteStorageFile,
+  editBoardMember,
+  editCalendarItem,
+  editNews,
+  editPlayer,
+  editReport,
+  editSponsor,
+  editStaff,
+  editTeam,
+  enableNotifications,
+  esc,
+  fileToJpeg,
+  finishTotpEnrollment,
+  formatDate,
+  formatDateTime,
+  hideComments,
+  initModularMfa,
+  initializeAdminAuth,
+  inputTimestamp,
+  loadAdminModeration,
+  loginAdmin,
+  logoutAdmin,
+  modalBackgroundClick,
+  openAdminCategory,
+  openBoardMember,
+  openCommentsForNews,
+  openModal,
+  openNews,
+  openPage,
+  openPlayer,
+  openReport,
+  openSponsor,
+  openStaff,
+  previewSelectedImage,
+  refreshAdminSecurityState,
+  registerCurrentDeviceForPush,
+  renderAdminLists,
+  renderBoard,
+  renderCalendar,
+  renderComments,
+  renderHomeMatchCards,
+  renderHomeNews,
+  renderNews,
+  renderOfvRankings,
+  renderReports,
+  renderSponsors,
+  renderTeams,
+  reportComment,
+  resetAdminIdleTimer,
+  resetBoardForm,
+  resetCalendarForm,
+  resetNewsForm,
+  resetPlayerForm,
+  resetReportForm,
+  resetSponsorForm,
+  resetStaffForm,
+  resetTeamForm,
+  safeOfvRankingUrl,
+  saveBoardMember,
+  saveCalendarItem,
+  saveNews,
+  savePlayer,
+  saveReport,
+  saveSponsor,
+  saveStaff,
+  saveTeam,
+  sendAdminVerificationEmail,
+  sendPushFromAdmin,
+  setMfaLoginStatus,
+  setMfaSetupStatus,
+  setNewsFilter,
+  setNewsSearch,
+  setupAdminWorkspace,
+  shareCurrentContent,
+  showAdminLogin,
+  showAdminMfaChallenge,
+  showAdminPanel,
+  showUpdateBanner,
+  startTotpEnrollment,
+  submitComment,
+  toDate,
+  toggleTeam,
+  tryHandleDeepLink,
+  updateAppNow,
+  updateNotificationStatus,
+  updatePushCounters,
+  updateTeamSelects,
+  uploadImage,
+  verifyAdminMfaCode,
+  writeAdminLog
+});
 </script>
 
 
@@ -7612,6 +7733,7 @@ function resetAdminIdleTimer(){
   },ADMIN_IDLE_TIMEOUT_MS);
 }
 ["click","touchstart","keydown","scroll"].forEach(evt=>window.addEventListener(evt,resetAdminIdleTimer,{passive:true}));
+
 </script>
 
 </body>
