@@ -412,10 +412,14 @@
     const DEFAULT_CATEGORIES = ['Lebensmittel','Restaurant & Freizeit','Haushalt','Gesundheit','Kleidung','Mobilität','Reisen','Hobby','Geschenke','Sonstiges'];
     const FIXED_CATEGORIES = ['Wohnen','Versicherung','Kommunikation','Mobilität','Abos','Gesundheit','Familie','Sparen & Investieren','Steuern','Sonstiges'];
     const today = new Date();
+    function dateKey(d) { return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+    function budgetKey(d) { return dateKey(new Date(d.getFullYear(),d.getMonth()+(d.getDate()>=25?1:0),1,12)).slice(0,7); }
+    function bounds(key) { const [y,m]=key.split('-').map(Number); return {start:new Date(y,m-2,25,12),end:new Date(y,m-1,24,12)}; }
+    function range(key) { const b=bounds(key); return formatDate(dateKey(b.start))+' – '+formatDate(dateKey(b.end)); }
 
     const defaultState = () => ({
       version: 4,
-      selectedMonth: `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`,
+      selectedMonth: budgetKey(today),
       fixedIncomes: [],
       extraIncomes: [],
       monthlyFixedCosts: [],
@@ -440,9 +444,8 @@
     const selectedYear = () => Number(state.selectedMonth.slice(0,4));
     const selectedMonthIndex = () => Number(state.selectedMonth.slice(5,7)) - 1;
     const currentDateForSelectedMonth = () => {
-      const nowKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-      if (state.selectedMonth === nowKey) return `${state.selectedMonth}-${String(today.getDate()).padStart(2,'0')}`;
-      return `${state.selectedMonth}-01`;
+      const now=new Date();
+      return state.selectedMonth===budgetKey(now)?dateKey(now):dateKey(bounds(state.selectedMonth).start);
     };
 
     function loadState() {
@@ -470,7 +473,11 @@
       if (message) showToast(message);
     }
 
-    function monthKeyFromDate(date) { return String(date || '').slice(0,7); }
+    function monthKeyFromDate(date) {
+      const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(date||''));
+      if(!match)return '';
+      return budgetKey(new Date(Number(match[1]),Number(match[2])-1,Number(match[3]),12));
+    }
     function sum(items, field='amount') { return items.reduce((total, item) => total + num(item[field]), 0); }
     function fixedIncomeTotal() { return sum(state.fixedIncomes); }
     function extraIncomeFor(month) { return state.extraIncomes.filter(x => monthKeyFromDate(x.date) === month); }
@@ -513,7 +520,7 @@
     }
 
     function renderAll() {
-      $('periodLabel').textContent = `${MONTHS[selectedMonthIndex()]} ${selectedYear()}`;
+      $('periodLabel').textContent = `${MONTHS[selectedMonthIndex()]} ${selectedYear()} · ${range(state.selectedMonth)}`;
       renderDashboard(); renderIncome(); renderFixed(); renderExpenses();
     }
 
@@ -590,18 +597,18 @@
     }
 
     function renderForecast() {
-      const year=selectedYear(), currentYear=today.getFullYear(), currentMonth=today.getMonth();
-      const income = fixedIncomeTotal()*12 + state.extraIncomes.filter(x=>Number(x.date?.slice(0,4))===year).reduce((s,x)=>s+num(x.amount),0);
+      const year=selectedYear(), currentKey=budgetKey(new Date());
+      const income = fixedIncomeTotal()*12 + state.extraIncomes.filter(x=>Number(monthKeyFromDate(x.date).slice(0,4))===year).reduce((s,x)=>s+num(x.amount),0);
       let variableProjection=0;
       for(let m=0;m<12;m++) {
         const key=`${year}-${String(m+1).padStart(2,'0')}`;
-        const hasActual=year<currentYear || (year===currentYear && m<=currentMonth) || expensesFor(key).length>0;
+        const hasActual=key<=currentKey;
         variableProjection += hasActual ? variableFor(key) : categoryBudgetTotal();
       }
       const forecast=income-monthlyFixedTotal()*12-annualTotal()-variableProjection;
       $('forecastValue').textContent=money(forecast);
       $('forecastValue').className=forecast>=0?'amount-positive':'amount-negative';
-      $('forecastText').textContent=`Prognostizierter Restbetrag für ${year}. Zukünftige Monate werden mit deinen Kategorie-Budgets berechnet.`;
+      $('forecastText').textContent=`Prognostizierter Restbetrag für das Budgetjahr ${year} (25.12.${year-1} bis 24.12.${year}). Zukünftige Monate werden mit deinen Kategorie-Budgets berechnet.`;
     }
 
     function renderGoals() {
@@ -680,7 +687,7 @@
     function openIncomeForm(item=null) {
       const mode=item?.kind || incomeMode;
       openModal(`<div class="modal-header"><h2>${item?'Einnahme bearbeiten':'Neue Einnahme'}</h2><button class="close-button" data-close>×</button></div><form id="incomeForm" class="form-grid"><label>Art<select name="kind"><option value="fixed" ${mode==='fixed'?'selected':''}>Fixeinnahme – jeden Monat</option><option value="extra" ${mode==='extra'?'selected':''}>Zusatzeinnahme – nur dieser Monat</option></select></label><label>Beschreibung<input class="input" name="description" value="${esc(item?.description||'')}" placeholder="z. B. Nettolohn" required></label><div class="form-row"><label>Betrag in CHF<input class="input" name="amount" type="number" min="0" step="0.05" value="${item?.amount??''}" required></label><label>Datum <span>nur bei Zusatzeinnahmen</span><input class="input" name="date" type="date" value="${item?.date||currentDateForSelectedMonth()}"></label></div><label>Notiz <span>optional</span><textarea name="note" rows="2">${esc(item?.note||'')}</textarea></label><button class="btn" type="submit">Speichern</button></form>`);
-      $('incomeForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const kind=fd.get('kind');const obj={id:item?.id||uid(),kind,description:fd.get('description').trim(),amount:num(fd.get('amount')),date:kind==='extra'?fd.get('date'):'',note:fd.get('note').trim()};if(item) removeItem('income',item.id,false);(kind==='fixed'?state.fixedIncomes:state.extraIncomes).push(obj);incomeMode=kind;saveState('Einnahme gespeichert');closeModal();renderAll();});
+      $('incomeForm').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const kind=fd.get('kind');const obj={id:item?.id||uid(),kind,description:fd.get('description').trim(),amount:num(fd.get('amount')),date:kind==='extra'?fd.get('date'):'',note:fd.get('note').trim()};if(item) removeItem('income',item.id,false);(kind==='fixed'?state.fixedIncomes:state.extraIncomes).push(obj);incomeMode=kind;if(kind==='extra')state.selectedMonth=monthKeyFromDate(obj.date);saveState('Einnahme gespeichert');closeModal();renderAll();});
     }
 
     function categoryOptions(list,current='') { const values=[...new Set([...list,current].filter(Boolean))]; return values.map(c=>`<option value="${esc(c)}" ${c===current?'selected':''}>${esc(c)}</option>`).join(''); }
@@ -737,8 +744,8 @@
     function importBackup(event) { const file=event.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);if(!data||!Array.isArray(data.expenses)||!Array.isArray(data.fixedIncomes))throw new Error();if(!confirm('Aktuelle Daten durch dieses Backup ersetzen?'))return;localStorage.setItem(STORAGE_KEY,JSON.stringify(data));state=loadState();closeModal();renderAll();showToast('Backup wiederhergestellt');}catch{alert('Die Datei ist kein gültiges Budgetplaner-Backup.');}};reader.readAsText(file); }
     function csvCell(v) { return `"${String(v??'').replace(/"/g,'""')}"`; }
     function exportCsv() {
-      const rows=[['Typ','Datum/Monat','Beschreibung','Kategorie','Betrag CHF','Notiz']];
-      state.fixedIncomes.forEach(x=>rows.push(['Fixeinnahme','Jeden Monat',x.description,'Einnahmen',x.amount,x.note]));
+      const rows=[['Typ','Datum/Monat','Beschreibung','Kategorie','Betrag CHF','Notiz','Budgetmonat']];
+      state.fixedIncomes.forEach(x=>rows.push(['Fixeinnahme','Jeden Monat',x.description,'Einnahmen',x.amount,x.note,x.date?monthKeyFromDate(x.date):'Global']));
       state.extraIncomes.forEach(x=>rows.push(['Zusatzeinnahme',x.date,x.description,'Einnahmen',x.amount,x.note]));
       state.monthlyFixedCosts.forEach(x=>rows.push(['Fixkosten monatlich','Jeden Monat',x.description,x.category,x.amount,x.note]));
       state.annualFixedCosts.forEach(x=>rows.push(['Fixkosten jährlich',MONTHS[(x.dueMonth||1)-1],x.description,x.category,x.annualAmount,x.note]));
@@ -752,7 +759,7 @@
       for(let month=0;month<12;month++) {
         const key=`${year}-${String(month+1).padStart(2,'0')}`;
         const income=incomeFor(key), monthly=monthlyFixedTotal(), reserve=annualReserve(), variable=variableFor(key);
-        rows.push({month:MONTHS[month],income,monthly,reserve,variable,remaining:income-monthly-reserve-variable});
+        rows.push({month:MONTHS[month]+' ('+range(key)+')',income,monthly,reserve,variable,remaining:income-monthly-reserve-variable});
       }
       const total=(field)=>rows.reduce((sum,row)=>sum+row[field],0);
       $('printReport').innerHTML=`<h1>Budget-Jahresübersicht ${year}</h1><p>Erstellt am ${new Intl.DateTimeFormat('de-CH').format(new Date())}</p><table><thead><tr><th>Monat</th><th>Einnahmen</th><th>Fixkosten</th><th>Rücklage Jahreskosten</th><th>Variable Ausgaben</th><th>Restbetrag</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.month}</td><td>${money(r.income)}</td><td>${money(r.monthly)}</td><td>${money(r.reserve)}</td><td>${money(r.variable)}</td><td>${money(r.remaining)}</td></tr>`).join('')}</tbody><tfoot><tr><td>Gesamt</td><td>${money(total('income'))}</td><td>${money(total('monthly'))}</td><td>${money(total('reserve'))}</td><td>${money(total('variable'))}</td><td>${money(total('remaining'))}</td></tr></tfoot></table>`;
