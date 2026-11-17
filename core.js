@@ -1,6 +1,6 @@
 (function(root){
 'use strict';
-const VERSION='6.0.0';
+const VERSION='6.0.1';
 const MONTHS=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const uid=()=>globalThis.crypto?.randomUUID?.()||Date.now()+'-'+Math.random().toString(16).slice(2);
 const round=n=>Math.round((Number(n)+Number.EPSILON)*100)/100;
@@ -26,6 +26,15 @@ function migrate(old){
  s.settings.pinHash=old.settings?.pinHash||'';s.migratedAt=new Date().toISOString();s.migrationNote='Historische Fixkosten mangels Gültigkeitsdatum unverändert übernommen. Alte Bezahlt-Markierungen sind Hinweise, keine Zahlungen. Fälligkeitstag bei alten Jahreskosten zunächst 1: bitte prüfen.';return s;
 }
 function effective(plan,k){if(plan.overrides[k])return clone(plan.overrides[k]);return clone(plan.versions.filter(v=>v.from<=k).sort((a,b)=>a.from.localeCompare(b.from)).at(-1)||null);}
+function upgradeIncomeCategories(s){
+ if(s.incomeCategoryUpgrade===1)return s;
+ const names=['Lohn / Gehalt','Bonus / 13. Monatslohn','Nebenverdienst','Rente / Pension','Mieteinnahmen','Unterhaltsbeiträge','Sonstige Einnahmen'];
+ const ids={};for(const name of names){const c={id:uid(),name,kind:'income',color:'#128469',hidden:false,budget:0};s.categories.push(c);ids[name]=c.id;}
+ function choose(v){const name=String(v.description||'').toLowerCase();if(/bonus|13\.|gratifikation/.test(name))return ids[names[1]];if(/lohn|gehalt|salär/.test(name))return ids[names[0]];if(/nebenverdienst|nebenjob/.test(name))return ids[names[2]];if(/rente|pension/.test(name))return ids[names[3]];if(/mieteinnahm/.test(name))return ids[names[4]];if(/unterhalt|aliment/.test(name))return ids[names[5]];return ids[names[6]];}
+ for(const p of s.plans.filter(p=>p.type==='income'))for(const v of [...p.versions,...Object.values(p.overrides)])v.category=choose(v);
+ for(const e of s.entries.filter(e=>e.type==='extra'))e.category=choose(e);
+ s.incomeCategoryUpgrade=1;return s;
+}
 function plansAt(s,k){return s.plans.map(p=>{const v=effective(p,k);return v&&v.active?{...v,id:p.id,type:p.type,override:Boolean(p.overrides[k]),legacyPaidYears:p.legacyPaidYears||[]}:null;}).filter(Boolean);}
 function total(xs){return round(xs.reduce((a,b)=>a+Number(b.amount),0));}
 function metrics(s,k,live=false){
@@ -68,6 +77,6 @@ function validate(s){
  for(const [k,c]of Object.entries(s.closed)){period(k);if(!c.metrics||!c.metrics.categories)throw Error('Abschluss ungültig');for(const f of ['income','monthly','reserve','gross','refunded','variable','remaining','budget','payments'])if(typeof c.metrics[f]!=='number'||!Number.isFinite(c.metrics[f]))throw Error('Abschlusswerte ungültig');for(const v of Object.values(c.metrics.categories)){text(v.name);amount(v.budget);if(!Number.isFinite(v.spent)||!/^#[0-9a-f]{6}$/i.test(v.color))throw Error('Abschlusskategorie ungültig');}}
  return s;
 }
-const api={VERSION,MONTHS,uid,round,dateStr,parseDate,key,keyDate,nowKey,bounds,shift,title,format,range,clone,empty,migrate,effective,plansAt,total,metrics,guarded,planChange,refundAvailable,closeMonth,reserveBalance,dueDate,validate};
+const api={VERSION,MONTHS,uid,round,dateStr,parseDate,key,keyDate,nowKey,bounds,shift,title,format,range,clone,empty,migrate,upgradeIncomeCategories,effective,plansAt,total,metrics,guarded,planChange,refundAvailable,closeMonth,reserveBalance,dueDate,validate};
 if(typeof module!=='undefined')module.exports=api;else root.Budget=api;
 })(globalThis);

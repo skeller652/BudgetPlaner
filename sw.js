@@ -1,8 +1,8 @@
 'use strict';
-const VERSION='6.0.0';
+const VERSION='6.0.1';
 const PREFIX='mein-budget-shell-';
 const CACHE=PREFIX+VERSION;
-const FILES=['./','./index.html','./style.css?v=6.0.0','./core.js?v=6.0.0','./app.js?v=6.0.0','./manifest.webmanifest','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png'];
+const FILES=['./','./index.html','./style.css?v=6.0.1','./core.js?v=6.0.1','./app.js?v=6.0.1','./manifest.webmanifest','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>{
   // Vollständige Shell atomar laden. Bei einem fehlenden Asset bleibt die alte Version aktiv.
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)));
